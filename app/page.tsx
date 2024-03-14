@@ -31,13 +31,13 @@ export default async function Home() {
       <div className={styles.flavour}>Moments connect us and create<br />shared memories.</div>
 
       <div className={styles.grid}>
-        <Link href='/sign-in' className={styles.card}>
+        <Link href='/' className={styles.card}>
           <h2>
             Connected <span>-&gt;</span>
           </h2>
           <p>See how your experiences connect to others.</p>
         </Link>
-        <Link href='/sign-in' className={styles.card}>
+        <Link href='/' className={styles.card}>
           <h2>
             Personal <span>-&gt;</span>
           </h2>
@@ -45,7 +45,7 @@ export default async function Home() {
             A line taylored to your family interactions and shared memories.
           </p>
         </Link>
-        <Link href='/sign-in' className={styles.card}>
+        <Link href='/' className={styles.card}>
           <h2>
             Recurring <span>-&gt;</span>
           </h2>

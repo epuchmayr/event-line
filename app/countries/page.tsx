@@ -11,6 +11,7 @@ const query = gql`
       code
       name
       emoji
+      currency
     }
   }
 `;
@@ -24,16 +25,16 @@ type Country = {
 export default function PollPage() {
   const { data }: { data: { countries: [Country] } } = useSuspenseQuery(query);
 
-  const cIndex = 35;
+  const cIndex = 60;
 
-  const top4 = data.countries.slice(cIndex, cIndex + 4);
+  const top4 = data.countries.slice(cIndex, cIndex + 50);
 
   return (
     <div>
       {top4.map((country) => {
         return (
           <div key={country.code}>
-            {country.name} - {country.emoji}
+            {country.name} - {country.emoji} {country.currency}
           </div>
         );
       })}
