@@ -35,6 +35,13 @@
   border-radius: var(--border-radius);
 }
 
+.flavour {
+  font-family: var(--font-outfit);
+  font-size: 3rem;
+  font-weight: 400;
+  text-align: center;
+}
+
 .code {
   font-weight: 700;
   font-family: var(--font-mono);

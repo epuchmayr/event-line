@@ -28,7 +28,7 @@ export default async function Home() {
         </div>
       </div>
       <BackgroundBeams />
-      <div className='text-center'>Moments connect us and<br />create shared memories.</div>
+      <div className={styles.flavour}>Moments connect us and create<br />shared memories.</div>
 
       <div className={styles.grid}>
         <Link href='/sign-in' className={styles.card}>

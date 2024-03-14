@@ -14,7 +14,7 @@ export default function Auth({
   user,
   userId,
 }: {
-  user: User | null;
+  user: string;
   userId: string | null;
 }) {
   if (userId) {
