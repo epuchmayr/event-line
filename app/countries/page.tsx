@@ -20,6 +20,7 @@ type Country = {
   code: string;
   name: string;
   emoji: string;
+  currency: string;
 };
 
 export default function PollPage() {
