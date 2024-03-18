@@ -188,6 +188,13 @@ const GoogleGeminiEffect = ({
   );
 };
 
+type Event = {
+  id: string;
+  name: string;
+  content: string;
+  author: string;
+};
+
 export default function Page() {
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
@@ -201,8 +208,6 @@ export default function Page() {
   const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.05, 1.2]);
   const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
 
-  console.log('scrollYProgress', scrollYProgress);
-
   const query = gql`
     query Events {
       events {
@@ -214,7 +219,7 @@ export default function Page() {
     }
   `;
 
-  const { data }: { data: {} } = useSuspenseQuery(query);
+  const { data }: { data: {events: [Event]} } = useSuspenseQuery(query);
   const [form, setForm] = useState({ filter: '' });
 
   return (
@@ -261,7 +266,12 @@ export default function Page() {
           value={form.filter}
           placeholder={'filter by name'}
         />
-        {JSON.stringify(data)}
+        {data.events.filter((event) =>
+          event.name.toLowerCase().includes(form.filter.toLowerCase()) ||
+          event.content.toLowerCase().includes(form.filter.toLowerCase())
+        ).map((event) => {return (
+          <div key={event.id}>{event.id} - {event.name} - {event.content} - {event.author}</div>
+        )})}
       </div>
     </div>
   );
