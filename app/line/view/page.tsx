@@ -42,7 +42,7 @@ const transition = {
   ease: 'linear',
 };
 
-export const GoogleGeminiEffect = ({
+const GoogleGeminiEffect = ({
   pathLengths,
   title,
   description,
@@ -188,7 +188,7 @@ export const GoogleGeminiEffect = ({
   );
 };
 
-export default function GoogleGeminiEffectDemo() {
+export default function Page() {
   const ref = React.useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
