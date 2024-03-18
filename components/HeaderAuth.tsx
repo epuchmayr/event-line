@@ -24,7 +24,7 @@ export default function Auth({
           <Link href='/countries'>
             <Button variant='text'>countries</Button>
           </Link>
-          <Link href='/line-view'>
+          <Link href='/line'>
             <Button variant='text'>line-view</Button>
           </Link>
           <Link href='/'>

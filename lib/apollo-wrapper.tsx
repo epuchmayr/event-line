@@ -7,11 +7,17 @@ import {
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
+import { env } from 'process';
 
 function makeClient() {
   const httpLink = new HttpLink({
     // https://studio.apollographql.com/public/spacex-l4uc6p/
-    uri: 'https://countries.trevorblades.com',
+    // uri: 'https://countries.trevorblades.com',
+    uri: 'https://suitable-martin-44.hasura.app/v1/graphql',
+    headers: {
+      'content-type': 'application/json',
+      'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET || '',
+    },
   });
 
   return new NextSSRApolloClient({
