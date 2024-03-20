@@ -2,40 +2,11 @@
 import React, { useRef, useState } from 'react';
 import { cn } from '@/utils/cn';
 import { motion, MotionValue, useScroll, useTransform } from 'framer-motion';
-import * as THREE from 'three';
-import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
-import { OrbitControls, useTexture, Stars } from '@react-three/drei';
-
-export const dynamic = 'force-dynamic';
 
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { formControlClasses } from '@mui/material';
 import gql from 'graphql-tag';
 
-function Box(props: ThreeElements['mesh']) {
-  const ref = useRef<THREE.Mesh>(null!);
-  const [hovered, hover] = useState(false);
-  const [clicked, click] = useState(false);
-
-  useFrame((state, delta) => {
-    ref.current.rotation.z += delta / 10;
-    hovered && (ref.current.rotation.y += delta);
-  });
-
-  return (
-    <mesh
-      {...props}
-      ref={ref}
-      scale={clicked ? 1.5 : 1}
-      onClick={(event) => click(!clicked)}
-      onPointerOver={(event) => hover(true)}
-      onPointerOut={(event) => hover(false)}
-    >
-      <boxGeometry args={[1, 1, 1]} />
-      <meshStandardMaterial color={hovered ? 'hotpink' : 'orange'} />
-    </mesh>
-  );
-}
+export const dynamic = 'force-dynamic';
 
 const transition = {
   duration: 0,
@@ -56,10 +27,10 @@ const GoogleGeminiEffect = ({
   return (
     <div className={cn('sticky top-60', className)}>
       <p className='text-lg md:text-7xl font-normal pb-4 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-100 to-neutral-300'>
-        {title || `Aceternity UI`}
+        {title || `Common Threads`}
       </p>
       <p className='text-xs md:text-xl font-normal text-center text-neutral-400 mt-4 max-w-lg mx-auto'>
-        {description || `Scroll this component and see the SVG come to life`}
+        {description || `Scroll this component to weave the threads`}
       </p>
 
       <svg
@@ -195,8 +166,19 @@ type Event = {
   author: string;
 };
 
+const query = gql`
+  query Events {
+    events {
+      id
+      name
+      content
+      author
+    }
+  }
+`;
+
 export default function Page() {
-  const ref = React.useRef(null);
+  const ref = useRef(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ['start start', 'end start'],
@@ -208,18 +190,7 @@ export default function Page() {
   const pathLengthFourth = useTransform(scrollYProgress, [0, 0.8], [0.05, 1.2]);
   const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
 
-  const query = gql`
-    query Events {
-      events {
-        id
-        name
-        content
-        author
-      }
-    }
-  `;
-
-  const { data }: { data: {events: [Event]} } = useSuspenseQuery(query);
+  const { data }: { data: { events: [Event] } } = useSuspenseQuery(query);
   const [form, setForm] = useState({ filter: '' });
 
   return (
@@ -227,7 +198,7 @@ export default function Page() {
       className='h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-40 overflow-clip'
       ref={ref}
     >
-      <h1>stuff on top</h1>
+      <h1>View line</h1>
       <GoogleGeminiEffect
         pathLengths={[
           pathLengthFirst,
@@ -238,26 +209,6 @@ export default function Page() {
         ]}
       />
 
-      {/* <Canvas>
-        <ambientLight intensity={0.1} />
-        <directionalLight position={[0, 0, 5]} />
-        <mesh position={[0.5, 0.5, 0.5]} rotation={[Math.PI / 2, 0, 0]}>
-          <sphereGeometry />
-          <meshToonMaterial transparent />
-        </mesh>
-        <OrbitControls autoRotate />
-        <Stars
-          radius={100}
-          depth={50}
-          count={5000}
-          factor={4}
-          saturation={0}
-          fade
-          speed={1}
-        />
-      </Canvas> */}
-      <h1>stuff on bottom</h1>
-
       <div className='sticky top-10'>
         <input
           onChange={(e) => {
@@ -266,12 +217,19 @@ export default function Page() {
           value={form.filter}
           placeholder={'filter by name'}
         />
-        {data.events.filter((event) =>
-          event.name.toLowerCase().includes(form.filter.toLowerCase()) ||
-          event.content.toLowerCase().includes(form.filter.toLowerCase())
-        ).map((event) => {return (
-          <div key={event.id}>{event.id} - {event.name} - {event.content} - {event.author}</div>
-        )})}
+        {data.events
+          .filter(
+            (event) =>
+              event.name.toLowerCase().includes(form.filter.toLowerCase()) ||
+              event.content.toLowerCase().includes(form.filter.toLowerCase())
+          )
+          .map((event) => {
+            return (
+              <div key={event.id}>
+                {event.id} - {event.name} - {event.content} - {event.author}
+              </div>
+            );
+          })}
       </div>
     </div>
   );

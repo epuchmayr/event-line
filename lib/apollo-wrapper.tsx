@@ -1,18 +1,14 @@
 'use client';
-
-import { ApolloClient, ApolloLink, HttpLink } from '@apollo/client';
+import { ApolloLink, HttpLink } from '@apollo/client';
 import {
   ApolloNextAppProvider,
   NextSSRApolloClient,
   NextSSRInMemoryCache,
   SSRMultipartLink,
 } from '@apollo/experimental-nextjs-app-support/ssr';
-import { env } from 'process';
 
 function makeClient() {
   const httpLink = new HttpLink({
-    // https://studio.apollographql.com/public/spacex-l4uc6p/
-    // uri: 'https://countries.trevorblades.com',
     uri: 'https://suitable-martin-44.hasura.app/v1/graphql',
     headers: {
       'content-type': 'application/json',
@@ -34,7 +30,7 @@ function makeClient() {
   });
 }
 
-// export function ApolloWrapper({ children }: React.PropsWithChildren) {
+//
 export function ApolloWrapper({ children }: { children: React.ReactNode }) {
   return (
     <ApolloNextAppProvider makeClient={makeClient}>
