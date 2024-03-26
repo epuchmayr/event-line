@@ -58,9 +58,9 @@ export default function Page() {
     // console.log({
     //   data: data.keys(),
     // });
-    for (const pair of data.entries()) {
-      console.log(pair[0], pair[1]);
-    }
+    // for (const pair of data.entries()) {
+    //   console.log(pair[0], pair[1]);
+    // }
   };
 
   return (
