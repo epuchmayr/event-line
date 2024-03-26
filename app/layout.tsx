@@ -3,9 +3,13 @@ import { Inter, Outfit } from 'next/font/google';
 import './globals.css';
 
 import { ClerkProvider } from '@clerk/nextjs';
-import { ApolloWrapper } from '../lib/apollo-wrapper';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
+
+import { LocalizationWrapper } from '../lib/localization-wrapper';
+
+import { ApolloWrapper } from '../lib/apollo-wrapper';
+
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 
@@ -30,11 +34,13 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang='en'>
         <AppRouterCacheProvider>
-          <ThemeProvider theme={theme}>
-            <body className={`${inter.className} ${outfit.variable}`}>
-              <ApolloWrapper>{children}</ApolloWrapper>
-            </body>
-          </ThemeProvider>
+          <LocalizationWrapper>
+            <ThemeProvider theme={theme}>
+              <body className={`${inter.className} ${outfit.variable}`}>
+                <ApolloWrapper>{children}</ApolloWrapper>
+              </body>
+            </ThemeProvider>
+          </LocalizationWrapper>
         </AppRouterCacheProvider>
       </html>
     </ClerkProvider>

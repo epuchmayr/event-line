@@ -21,10 +21,7 @@ export default function Auth({
     return (
       <div className={styles.actions}>
         <Stack spacing={2} direction='row'>
-          <Link href='/countries'>
-            <Button variant='text'>countries</Button>
-          </Link>
-          <Link href='/line'>
+          <Link href='/line/'>
             <Button variant='text'>line-view</Button>
           </Link>
           <Link href='/'>

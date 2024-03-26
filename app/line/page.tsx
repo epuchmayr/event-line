@@ -42,7 +42,7 @@ export default function Page() {
         <Link href={'/line/create'}>
           <Button variant='contained'>Create</Button>
         </Link>
-        <Link href={'/line/view'}>
+        <Link href={'/line/view/'}>
           <Button variant='outlined'>View</Button>
         </Link>
       </Stack>
