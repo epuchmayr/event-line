@@ -6,9 +6,9 @@ import { ClerkProvider } from '@clerk/nextjs';
 
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
 
-import { LocalizationWrapper } from '../lib/localization-wrapper';
+import { LocalizationWrapper } from '@/lib/localization-wrapper';
 
-import { ApolloWrapper } from '../lib/apollo-wrapper';
+import { ApolloWrapper } from '@/lib/apollo-wrapper';
 
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';

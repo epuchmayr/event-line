@@ -3,13 +3,8 @@ import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import * as THREE from 'three';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
-import { OrbitControls, useTexture, Stars } from '@react-three/drei';
-
-// export const dynamic = 'force-dynamic';
-
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { Button, ButtonGroup, Stack, formControlClasses } from '@mui/material';
-import gql from 'graphql-tag';
+import { OrbitControls, Stars } from '@react-three/drei';
+import { Button, Stack } from '@mui/material';
 
 function Box(props: ThreeElements['mesh']) {
   const ref = useRef<THREE.Mesh>(null!);
@@ -35,6 +30,7 @@ function Box(props: ThreeElements['mesh']) {
     </mesh>
   );
 }
+
 export default function Page() {
   return (
     <div className='h-screen'>
@@ -42,7 +38,7 @@ export default function Page() {
         <Link href={'/line/create'}>
           <Button variant='contained'>Create</Button>
         </Link>
-        <Link href={'/line/view/'}>
+        <Link href={'/line/view'}>
           <Button variant='outlined'>View</Button>
         </Link>
       </Stack>

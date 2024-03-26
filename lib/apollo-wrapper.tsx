@@ -1,4 +1,5 @@
 'use client';
+
 import { ApolloLink, HttpLink } from '@apollo/client';
 import {
   ApolloNextAppProvider,
@@ -12,7 +13,7 @@ function makeClient() {
     uri: 'https://suitable-martin-44.hasura.app/v1/graphql',
     headers: {
       'content-type': 'application/json',
-      'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET || '',
+      'x-hasura-admin-secret': process.env.HASURA_ADMIN_SECRET!,
     },
   });
 
