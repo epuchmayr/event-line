@@ -32,7 +32,7 @@ function SuspenseFallback() {
 }
 
 
-function List() {
+function List({filterString}: {filterString: string}) {
   const { data }: { data: { events: [Event] } | undefined } = useSuspenseQuery(query, {
         errorPolicy: 'all',
       });
@@ -40,6 +40,11 @@ function List() {
   return (
     <ol>
       {data && data.events
+            .filter(
+              (event) =>
+                event.name.toLowerCase().includes(filterString.toLowerCase()) ||
+                event.content.toLowerCase().includes(filterString.toLowerCase())
+            )
             .map((event) => {
               return (
                 <div key={event.id}>
@@ -91,7 +96,7 @@ export default function Page() {
           placeholder={'filter by name'}
         />
         <Suspense fallback={<SuspenseFallback />}>
-          <List />
+          <List filterString={form.filter} />
         </Suspense>
       </div>
     </div>
