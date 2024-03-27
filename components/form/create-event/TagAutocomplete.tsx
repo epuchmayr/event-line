@@ -20,7 +20,7 @@ export default function AutocompleteCreateOption() {
 
   return (
     <>
-      <input type='hidden' name='tags' value={JSON.stringify(value)} />
+      <input type='hidden' name='event_tags' value={JSON.stringify(value)} />
       <Autocomplete
         id='tags-outlined'
         multiple

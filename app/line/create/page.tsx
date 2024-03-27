@@ -23,19 +23,78 @@ import dayjs, { Dayjs } from 'dayjs';
 
 import { SelectChangeEvent } from '@mui/material';
 import TagAutocomplete from '@/components/form/create-event/TagAutocomplete';
+import { useUser } from '@clerk/nextjs';
 
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { gql, useMutation } from '@apollo/client';
+
+// dayjs datePicker and timePicker setup
 const currentDate = dayjs();
 const rangeDate = currentDate.add(1, 'day');
 const currentHour = currentDate;
 const rangeHour = currentDate.add(1, 'hour');
 
+type Event = {
+  id: string;
+  name: string;
+  content: string;
+  author: string;
+};
+const ADD_EVENT = gql`
+  mutation (
+    $event_name: String!
+    $event_startDate: String!
+    $event_endDate: String!
+    $event_startTime: String!
+    $event_endTime: String!
+    $event_description: String!
+    $event_tags: String!
+    $event_privacy: String!
+    $user_id: String!
+    $user_full_name: String!
+  ) {
+    insert_events(
+      event_name: $event_name
+      event_startDate: $event_startDate
+      event_endDate: $event_endDate
+      event_startTime: $event_startTime
+      event_endTime: $event_endTime
+      event_description: $event_description
+      event_tags: $event_tags
+      event_privacy: $event_privacy
+      user_id: $user_id
+      user_full_name: $user_full_name
+    ) {
+      returning {
+        id
+        event_name
+        event_startDate
+        event_endDate
+        event_startTime
+        event_endTime
+        event_description
+        event_tags
+        event_privacy
+        user_id
+        user_full_name
+      }
+    }
+  }
+`;
+
 export default function Page() {
+  const { user } = useUser();
+  const userId = user?.id.toString();
+  const userFullName = user?.fullName?.toString();
+
   const [formState, setFormState] = React.useState({
     showDateRange: false,
     showTime: false,
     showTimeRange: false,
     privacy: 'visible',
   });
+
+  const [addEvent] = useMutation(ADD_EVENT);
 
   const [selectedDate, setSelectedDate] = useState<Dayjs>(currentDate);
 
@@ -54,13 +113,26 @@ export default function Page() {
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // console.log({
-    //   data: data.keys(),
-    // });
-    // for (const pair of data.entries()) {
+    const formData = new FormData(event.currentTarget);
+    // for (const pair of formData.entries()) {
     //   console.log(pair[0], pair[1]);
     // }
+
+    addEvent({
+      variables: {
+        event_name: formData.get('event_name') as string,
+        event_startDate: formData.get('event_startDate') as string,
+        event_endDate: formData.get('event_endDate') as string,
+        event_startTime: formData.get('event_startTime') as string,
+        event_endTime: formData.get('event_endTime') as string,
+        event_description: formData.get('event_description') as string,
+        event_tags: formData.get('event_tags') as string,
+        event_privacy: formData.get('event_privacy') as string,
+        user_id: formData.get('user_id') as string,
+        user_full_name: formData.get('user_full_name') as string,
+      },
+    });
+
   };
 
   return (
@@ -70,14 +142,13 @@ export default function Page() {
           component='img'
           alt='green iguana'
           height='140'
-          image='/images/contemplative-reptile.jpg'
+          image='/images/intergalactic_loom.png'
         />
         <CardHeader
           title='Create a moment'
           subheader={selectedDate.format('YYYY-MM-DD').toString()}
         />
         <CardContent>
-          {/* <Typography gutterBottom variant='h5' component='div'></Typography> */}
           <Box
             component='form'
             onSubmit={handleSubmit}
@@ -85,16 +156,18 @@ export default function Page() {
               '& > :not(style)': { mb: 2, width: '100%' },
             }}
           >
+            <input type='hidden' name='user_id' value={userId} />
+            <input type='hidden' name='user_full_name' value={userFullName} />
             <TextField
               required
               id='outlined-required'
               label='Event name'
-              name='name'
+              name='event_name'
             />
             <Stack direction='row' spacing={1}>
               <MobileDatePicker
                 label='Date'
-                name='startDate'
+                name='event_startDate'
                 defaultValue={selectedDate}
               />
 
@@ -112,7 +185,7 @@ export default function Page() {
             <Collapse in={formState.showDateRange} timeout={200}>
               <MobileDatePicker
                 label='End date'
-                name='endDate'
+                name='event_endDate'
                 disabled={!formState.showDateRange}
                 defaultValue={rangeDate}
               />
@@ -132,7 +205,7 @@ export default function Page() {
               <Stack direction='row' spacing={1}>
                 <MobileTimePicker
                   label='Time'
-                  name='startTime'
+                  name='event_startTime'
                   disabled={!formState.showTime}
                   defaultValue={currentHour}
                 />
@@ -156,7 +229,7 @@ export default function Page() {
                 <MobileTimePicker
                   disabled={!formState.showTime || !formState.showTimeRange}
                   label='End time'
-                  name='endTime'
+                  name='event_endTime'
                   defaultValue={rangeHour}
                 />
               </Collapse>
@@ -165,7 +238,7 @@ export default function Page() {
             <TextField
               id='outlined-multiline-static'
               label='Description'
-              name='description'
+              name='event_description'
               multiline
               minRows={4}
               maxRows={8}
@@ -180,7 +253,7 @@ export default function Page() {
                 id='visibility-select'
                 value={formState.privacy}
                 label='Privacy'
-                name='privacy'
+                name='event_privacy'
                 onChange={handleChangeSelect}
               >
                 <MenuItem value={'visible'}>Visible</MenuItem>

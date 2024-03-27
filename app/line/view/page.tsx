@@ -26,32 +26,34 @@ const query = gql`
   }
 `;
 
-
 function SuspenseFallback() {
   return <div>Loading...</div>;
 }
 
-
-function List({filterString}: {filterString: string}) {
-  const { data }: { data: { events: [Event] } | undefined } = useSuspenseQuery(query, {
-        errorPolicy: 'all',
-      });
+function List({ filterString }: { filterString: string }) {
+  const { data }: { data: { events: [Event] } | undefined } = useSuspenseQuery(
+    query,
+    {
+      errorPolicy: 'all',
+    }
+  );
 
   return (
     <ol>
-      {data && data.events
-            .filter(
-              (event) =>
-                event.name.toLowerCase().includes(filterString.toLowerCase()) ||
-                event.content.toLowerCase().includes(filterString.toLowerCase())
-            )
-            .map((event) => {
-              return (
-                <div key={event.id}>
-                  {event.id} - {event.name} - {event.content} - {event.author}
-                </div>
-              );
-            })}
+      {data &&
+        data.events
+          .filter(
+            (event) =>
+              event.name.toLowerCase().includes(filterString.toLowerCase()) ||
+              event.content.toLowerCase().includes(filterString.toLowerCase())
+          )
+          .map((event) => {
+            return (
+              <div key={event.id}>
+                {event.id} - {event.name} - {event.content} - {event.author}
+              </div>
+            );
+          })}
     </ol>
   );
 }
@@ -102,4 +104,3 @@ export default function Page() {
     </div>
   );
 }
-
