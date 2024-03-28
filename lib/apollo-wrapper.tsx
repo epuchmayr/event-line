@@ -10,6 +10,7 @@ import {
 
 function makeClient() {
   const httpLink = new HttpLink({
+    // uri: "https://main--spacex-l4uc6p.apollographos.net/graphql",
     uri: 'https://suitable-martin-44.hasura.app/v1/graphql',
     headers: {
       'content-type': 'application/json',

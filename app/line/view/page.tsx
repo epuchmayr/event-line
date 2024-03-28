@@ -10,21 +10,63 @@ export const dynamic = 'force-dynamic';
 
 type Event = {
   id: string;
-  name: string;
-  content: string;
-  author: string;
+  event_name: string;
+  event_start_date: string;
+  event_end_date: string;
+  event_start_time: string;
+  event_end_time: string;
+  event_description: string;
+  event_content: string;
+  event_tags: string;
+  event_privacy: string;
+  user_id: string;
+  user_full_name: string;
 };
 
 const query = gql`
   query Events {
     events {
       id
-      name
-      content
-      author
+      event_name
+      event_start_date
+      event_end_date
+      event_start_time
+      event_end_time
+      event_description
+      event_content
+      event_tags
+      event_privacy
+      user_id
+      user_full_name
     }
   }
 `;
+
+// const query = gql`
+//   query {
+//     launchLatest {
+//       mission_name
+//       launch_date_local
+//       launch_site {
+//         site_name_long
+//       }
+//       links {
+//         article_link
+//         video_link
+//       }
+//       rocket {
+//         rocket_name
+//         rocket_type
+//       }
+//       ships {
+//         name
+//         home_port
+//         image
+//       }
+
+//     }
+//   }
+// `;
 
 function SuspenseFallback() {
   return <div>Loading...</div>;
@@ -40,17 +82,21 @@ function List({ filterString }: { filterString: string }) {
 
   return (
     <ol>
+      {/* {JSON.stringify(data)} */}
       {data &&
         data.events
           .filter(
             (event) =>
-              event.name.toLowerCase().includes(filterString.toLowerCase()) ||
-              event.content.toLowerCase().includes(filterString.toLowerCase())
+              event.user_full_name.toLowerCase().includes(filterString.toLowerCase()) ||
+              event.event_description.toLowerCase().includes(filterString.toLowerCase())
           )
           .map((event) => {
             return (
               <div key={event.id}>
-                {event.id} - {event.name} - {event.content} - {event.author}
+                {event.id} - {event.user_full_name} - {event.event_name}
+                 - {event.event_description} - {event.event_start_date}
+                 - {event.user_id} - {event.event_content}
+                 - {event.event_tags} - {event.event_privacy}
               </div>
             );
           })}

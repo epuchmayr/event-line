@@ -43,11 +43,12 @@ type Event = {
 const ADD_EVENT = gql`
   mutation (
     $event_name: String!
-    $event_startDate: String!
-    $event_endDate: String!
-    $event_startTime: String!
-    $event_endTime: String!
+    $event_start_date: String!
+    $event_end_date: String!
+    $event_start_time: String!
+    $event_end_time: String!
     $event_description: String!
+    $event_content: String!
     $event_tags: String!
     $event_privacy: String!
     $user_id: String!
@@ -55,11 +56,12 @@ const ADD_EVENT = gql`
   ) {
     insert_events(
       event_name: $event_name
-      event_startDate: $event_startDate
-      event_endDate: $event_endDate
-      event_startTime: $event_startTime
-      event_endTime: $event_endTime
+      event_start_date: $event_start_date
+      event_end_date: $event_end_date
+      event_start_time: $event_start_time
+      event_end_time: $event_end_time
       event_description: $event_description
+      event_content: $event_content
       event_tags: $event_tags
       event_privacy: $event_privacy
       user_id: $user_id
@@ -68,11 +70,12 @@ const ADD_EVENT = gql`
       returning {
         id
         event_name
-        event_startDate
-        event_endDate
-        event_startTime
-        event_endTime
+        event_start_date
+        event_end_date
+        event_start_time
+        event_end_time
         event_description
+        event_content
         event_tags
         event_privacy
         user_id
@@ -121,18 +124,18 @@ export default function Page() {
     addEvent({
       variables: {
         event_name: formData.get('event_name') as string,
-        event_startDate: formData.get('event_startDate') as string,
-        event_endDate: formData.get('event_endDate') as string,
-        event_startTime: formData.get('event_startTime') as string,
-        event_endTime: formData.get('event_endTime') as string,
+        event_start_date: formData.get('event_start_date') as string,
+        event_end_date: formData.get('event_end_date') as string,
+        event_start_time: formData.get('event_start_time') as string,
+        event_end_time: formData.get('event_end_time') as string,
         event_description: formData.get('event_description') as string,
+        event_content: formData.get('event_content') as string,
         event_tags: formData.get('event_tags') as string,
         event_privacy: formData.get('event_privacy') as string,
         user_id: formData.get('user_id') as string,
         user_full_name: formData.get('user_full_name') as string,
       },
     });
-
   };
 
   return (
@@ -140,9 +143,9 @@ export default function Page() {
       <Card sx={{ maxWidth: 600 }}>
         <CardMedia
           component='img'
-          alt='green iguana'
           height='140'
           image='/images/intergalactic_loom.png'
+          alt='intergalactic loom'
         />
         <CardHeader
           title='Create a moment'
@@ -167,7 +170,7 @@ export default function Page() {
             <Stack direction='row' spacing={1}>
               <MobileDatePicker
                 label='Date'
-                name='event_startDate'
+                name='event_start_date'
                 defaultValue={selectedDate}
               />
 
@@ -185,7 +188,7 @@ export default function Page() {
             <Collapse in={formState.showDateRange} timeout={200}>
               <MobileDatePicker
                 label='End date'
-                name='event_endDate'
+                name='event_end_date'
                 disabled={!formState.showDateRange}
                 defaultValue={rangeDate}
               />
@@ -205,7 +208,7 @@ export default function Page() {
               <Stack direction='row' spacing={1}>
                 <MobileTimePicker
                   label='Time'
-                  name='event_startTime'
+                  name='event_start_time'
                   disabled={!formState.showTime}
                   defaultValue={currentHour}
                 />
@@ -229,16 +232,25 @@ export default function Page() {
                 <MobileTimePicker
                   disabled={!formState.showTime || !formState.showTimeRange}
                   label='End time'
-                  name='event_endTime'
+                  name='event_end_time'
                   defaultValue={rangeHour}
                 />
               </Collapse>
             </Collapse>
 
             <TextField
-              id='outlined-multiline-static'
+              id='outlined-multiline-description'
               label='Description'
               name='event_description'
+              multiline
+              minRows={1}
+              maxRows={2}
+              placeholder='What is it about'
+            />
+            <TextField
+              id='outlined-multiline-content'
+              label='Content'
+              name='event_content'
               multiline
               minRows={4}
               maxRows={8}
