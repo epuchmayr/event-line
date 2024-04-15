@@ -4,7 +4,8 @@ import Link from 'next/link';
 import * as THREE from 'three';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
-import { Button, Stack } from '@mui/material';
+
+import { Button } from '@/components/ui/button';
 
 function Box(props: ThreeElements['mesh']) {
   const ref = useRef<THREE.Mesh>(null!);
@@ -34,14 +35,12 @@ function Box(props: ThreeElements['mesh']) {
 export default function Page() {
   return (
     <div className='h-screen'>
-      <Stack spacing={2} direction='row'>
-        <Link href={'/line/create'}>
-          <Button variant='contained'>Create</Button>
-        </Link>
-        <Link href={'/line/view'}>
-          <Button variant='outlined'>View</Button>
-        </Link>
-      </Stack>
+      <Link href={'/line/create'}>
+        <Button>Create</Button>
+      </Link>
+      <Link href={'/line/view'}>
+        <Button variant='secondary'>View</Button>
+      </Link>
 
       <Canvas>
         <ambientLight intensity={0.1} />
@@ -50,7 +49,7 @@ export default function Page() {
           <sphereGeometry />
           <meshToonMaterial transparent />
         </mesh>
-        <OrbitControls autoRotate autoRotateSpeed={.066666} />
+        <OrbitControls autoRotate autoRotateSpeed={0.066666} />
         <Stars
           radius={100}
           depth={50}

@@ -4,16 +4,11 @@ import './globals.css';
 
 import { ClerkProvider } from '@clerk/nextjs';
 
-import { AppRouterCacheProvider } from '@mui/material-nextjs/v14-appRouter';
-
-import { LocalizationWrapper } from '@/lib/localization-wrapper';
-
 import { ApolloWrapper } from '@/lib/apollo-wrapper';
 
-import { ThemeProvider } from '@mui/material/styles';
-import theme from './theme';
+import { ThemeProvider } from '@/components/theme-provider';
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ['latin'], variable: "--font-sans", });
 const outfit = Outfit({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -32,16 +27,17 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang='en'>
-        <AppRouterCacheProvider>
-          <LocalizationWrapper>
-            <ThemeProvider theme={theme}>
-              <body className={`${inter.className} ${outfit.variable}`}>
-                <ApolloWrapper>{children}</ApolloWrapper>
-              </body>
-            </ThemeProvider>
-          </LocalizationWrapper>
-        </AppRouterCacheProvider>
+      <html lang='en' suppressHydrationWarning>
+        <body className={`${inter.className} ${outfit.variable}`}>
+          <ThemeProvider
+            attribute='class'
+            defaultTheme='system'
+            enableSystem
+            disableTransitionOnChange
+          >
+            <ApolloWrapper>{children}</ApolloWrapper>
+          </ThemeProvider>
+        </body>
       </html>
     </ClerkProvider>
   );

@@ -1,4 +1,3 @@
-
 import { motion, MotionValue } from 'framer-motion';
 import { cn } from '@/utils/cn';
 
@@ -19,7 +18,7 @@ export const GeminiEffect = ({
   className?: string;
 }) => {
   return (
-    <div className={cn('sticky top-60', className)}>
+    <div className={cn('sticky top-20', className)}>
       <p className='text-lg md:text-7xl font-normal pb-4 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-100 to-neutral-300'>
         {title || `Common Threads`}
       </p>

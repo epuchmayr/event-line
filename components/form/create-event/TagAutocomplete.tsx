@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { TextField, Chip } from '@mui/material';
-import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
+// import { TextField, Chip } from '@mui/material';
+// import Autocomplete, { createFilterOptions } from '@mui/material/Autocomplete';
 import { element } from 'three/examples/jsm/nodes/Nodes.js';
 
-const filter = createFilterOptions<EventOptionTypePlus>();
+// const filter = createFilterOptions<EventOptionTypePlus>();
 
 export default function AutocompleteCreateOption() {
   const options: EventOptionTypePlus[] = eventTags.map((option) => {
@@ -21,7 +21,7 @@ export default function AutocompleteCreateOption() {
   return (
     <>
       <input type='hidden' name='event_tags' value={JSON.stringify(value)} />
-      <Autocomplete
+      {/* <Autocomplete
         id='tags-outlined'
         multiple
         selectOnFocus
@@ -89,7 +89,7 @@ export default function AutocompleteCreateOption() {
           <TextField {...params} label='Tags' placeholder='Find tag...' />
         )}
         autoComplete
-      />
+      /> */}
     </>
   );
 }

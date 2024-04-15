@@ -22,6 +22,6 @@
     },
     "downlevelIteration": true,
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/apollo-wrapper.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "lib/apollo-wrapper-ssr.tsx"],
   "exclude": ["node_modules"]
 }

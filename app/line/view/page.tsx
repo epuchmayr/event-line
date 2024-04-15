@@ -42,61 +42,44 @@ const query = gql`
   }
 `;
 
-// const query = gql`
-//   query {
-//     launchLatest {
-//       mission_name
-//       launch_date_local
-//       launch_site {
-//         site_name_long
-//       }
-//       links {
-//         article_link
-//         video_link
-//       }
-//       rocket {
-//         rocket_name
-//         rocket_type
-//       }
-//       ships {
-//         name
-//         home_port
-//         image
-//       }
-
-//     }
-//   }
-// `;
-
 function SuspenseFallback() {
   return <div>Loading...</div>;
 }
 
 function List({ filterString }: { filterString: string }) {
-  const { data }: { data: { events: [Event] } | undefined } = useSuspenseQuery(
+  const {
+    error,
+    data,
+  }: { error?: any; data: { events: [Event] } | undefined } = useSuspenseQuery(
     query,
     {
       errorPolicy: 'all',
     }
   );
+  if (error) return <p>Error :(</p>;
 
   return (
     <ol>
       {/* {JSON.stringify(data)} */}
       {data &&
         data.events
-          .filter(
-            (event) =>
-              event.user_full_name.toLowerCase().includes(filterString.toLowerCase()) ||
-              event.event_description.toLowerCase().includes(filterString.toLowerCase())
-          )
+          .filter((event) => {
+            console.log(JSON.stringify(Object.values(event)));
+            return JSON.stringify(Object.values(event))
+              .toLowerCase()
+              .includes(filterString.toLowerCase());
+          })
           .map((event) => {
             return (
               <div key={event.id}>
-                {event.id} - {event.user_full_name} - {event.event_name}
-                 - {event.event_description} - {event.event_start_date}
-                 - {event.user_id} - {event.event_content}
-                 - {event.event_tags} - {event.event_privacy}
+                {event.event_name} - {event.event_description}
+                <br /> by: {event.user_full_name}-{' '}
+                {new Date(event.event_start_date).toDateString()}-{' '}
+                {event.event_content}
+                <br />
+                {event.event_tags} - {event.event_privacy}
+                <br />
+                <br />
               </div>
             );
           })}
@@ -121,10 +104,9 @@ export default function Page() {
 
   return (
     <div
-      className='h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-40 overflow-clip'
+      className='h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-20 overflow-clip'
       ref={ref}
     >
-      <h1>View line</h1>
       <GeminiEffect
         pathLengths={[
           pathLengthFirst,
@@ -135,7 +117,7 @@ export default function Page() {
         ]}
       />
 
-      <div className='sticky top-10'>
+      <div className='sticky top-5'>
         <input
           onChange={(e) => {
             setForm({ ...form, filter: e.target.value });
