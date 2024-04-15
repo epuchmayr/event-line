@@ -1,7 +1,9 @@
 'use client'
 import { useState } from "react";
 
-export default function List({ data }) {
+import { Event } from '@/types/global'
+
+export default function List({ data }: {data: {events: [Event]}}) {
 
   const [filterString, setFilterString] = useState('');
 
