@@ -1,7 +1,6 @@
 'use client';
 import { useState } from 'react';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { formControlClasses } from '@mui/material';
 import gql from 'graphql-tag';
 
 export const dynamic = 'force-dynamic';

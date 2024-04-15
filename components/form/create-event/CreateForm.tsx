@@ -162,12 +162,6 @@ export default function CreateForm({ handleSubmit }) {
         height={640}
         priority
       />
-      {/* <CardMedia
-      component='img'
-      height='140'
-      image='/images/intergalactic_loom.png'
-      alt='intergalactic loom'
-    /> */}
       <CardHeader>
         <CardTitle>Create a moment</CardTitle>
         <CardDescription>
