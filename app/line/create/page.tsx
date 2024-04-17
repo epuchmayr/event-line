@@ -28,7 +28,7 @@ export default function Page() {
   });
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    // event.preventDefault();
+    event.preventDefault();
     const formData = new FormData(event.currentTarget);
     for (const pair of formData.entries()) {
       console.log(pair[0], pair[1]);
