@@ -102,7 +102,11 @@ const FormSchema = z.object({
       message: 'Event content must not be longer than 4096 characters.',
     })
     .optional(),
-  event_image: z.instanceof(FileList).optional(),
+
+  // fix image uploading at a later date
+  // causes "ReferenceError: FileList is not defined" erro in vercel
+  // https://github.com/vercel/next.js/discussions/59691
+  // event_image: z.instanceof(FileList).optional(),
   event_start_date: z.date().nullable(),
   event_end_date: z.date().optional(),
 
@@ -175,7 +179,7 @@ export default function CreateForm({
     },
     resolver: zodResolver(FormSchema),
   });
-  const imageRef = form.register("event_image");
+  // const imageRef = form.register("event_image");
   // test form return
   function onSubmit(values: z.infer<typeof FormSchema>) {
     // Do something with the form values.
@@ -245,7 +249,7 @@ export default function CreateForm({
               )}
             />
 
-            <FormField
+            {/* <FormField
               control={form.control}
               name='event_image'
               render={({ field }) => (
@@ -263,7 +267,7 @@ export default function CreateForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
 
             <div className='flex gap-2 justify-between'>
               <div className={`${formState.showDateRange ? 'hidden' : null}`}>
