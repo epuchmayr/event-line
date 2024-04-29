@@ -5,7 +5,7 @@ import { addDays, format, addHours } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { DateRange, SelectRangeEventHandler } from 'react-day-picker';
 
-import { DayPicker } from "react-day-picker"
+import { DayPicker } from 'react-day-picker';
 
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
@@ -20,11 +20,11 @@ import { ControllerProps, ControllerRenderProps } from 'react-hook-form';
 export function DatePickerWithRange({
   className,
   value,
-  onChange
+  onChange,
 }: // }: React.HTMLAttributes<HTMLDivElement>) {
 {
   className?: string;
-  value: {from: Date, to: Date};
+  value: { from: Date; to: Date };
   onChange: SelectRangeEventHandler;
 }) {
 
@@ -33,25 +33,25 @@ export function DatePickerWithRange({
       <Popover>
         <PopoverTrigger asChild>
           <Button
-            id="date"
-            variant={"outline"}
+            id='date'
+            variant={'outline'}
             className={cn(
-              "w-[300px] justify-start text-left font-normal",
-              !value && "text-muted-foreground"
+              'w-[300px] justify-start text-left font-normal',
+              !value && 'text-muted-foreground'
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className='mr-2 h-4 w-4' />
             {value?.from ? (
               value.to ? (
                 <>
-                  {format(value.from, "LLL dd, y")} -{" "}
-                  {format(value.to, "LLL dd, y")}
+                  {format(value.from, 'LLL dd, y')} -{' '}
+                  {format(value.to, 'LLL dd, y')}
                 </>
               ) : (
-                format(value.from, "LLL dd, y")
+                format(value.from, 'LLL dd, y')
               )
             ) : (
-              <span>Pick a date</span>
+              <span>Pick a date range</span>
             )}
           </Button>
         </PopoverTrigger>
@@ -68,4 +68,3 @@ export function DatePickerWithRange({
     </div>
   );
 }
-

@@ -1,12 +1,15 @@
 'use client';
 import React, { useState } from 'react';
 
+import Image from 'next/image';
+import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
+import { gql, useMutation } from '@apollo/client';
+
 import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
@@ -17,46 +20,35 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
 import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
-
-import dayjs, { Dayjs } from 'dayjs';
-
-import TagAutocomplete from '@/components/form/create-event/TagAutocomplete';
-
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { gql, useMutation } from '@apollo/client';
-
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import Image from 'next/image';
 import { Separator } from '@/components/ui/separator';
 import { FloatingLabelInput } from '@/components/ui/floating-label-input';
-import { DateTimePicker, TimePicker } from '@/components/ui/datetime-picker';
 import { Granularity } from '@react-types/datepicker';
-
-import dynamic from 'next/dynamic';
 import { DatePickerWithRange } from '@/components/ui/daterange-picker';
 import { DatePicker } from '@/components/ui/date-picker';
+import { TimePicker } from '@/components/ui/datetime-picker';
 
 import { TimeValue } from 'react-aria';
+
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+
+import dynamic from 'next/dynamic';
 
 // dayjs datePicker and timePicker setup
 const currentDate = new Date();
@@ -110,17 +102,18 @@ const FormSchema = z.object({
       message: 'Event content must not be longer than 4096 characters.',
     })
     .optional(),
+  event_image: z.instanceof(FileList).optional(),
+  event_start_date: z.date().nullable(),
+  event_end_date: z.date().optional(),
+
+  event_range_date: dateRangeSchema.nullable().optional(),
+
+  event_start_time: timeSchema.optional(),
+  event_end_time: timeSchema.optional(),
   event_tags: z
     .array(optionSchema)
     .min(1, { message: 'Please select at least one tag.' }),
   event_privacy: z.enum(['visible', 'hidden']),
-  event_start_date: z.date().nullable(),
-  event_end_date: z.date().optional(),
-
-  event_range_date: dateRangeSchema.nullable(),
-
-  event_start_time: timeSchema.optional(),
-  event_end_time: timeSchema.optional(),
   // }).refine(schema => !event_range_date && !event_start_date, {
   //   message: 'must have a start date specified',
   //   path: ['event_start_date'],
@@ -131,17 +124,20 @@ export default function CreateForm({
 }: {
   handleSubmit: Function;
 }) {
-  const [formState, setFormState] = React.useState({
+  const [formState, setFormState] = React.useState<{
+    showDateRange: boolean;
+    granularity: Granularity;
+    showTime: boolean;
+    showTimeRange: boolean;
+    privacy: string;
+    [key: string]: boolean | Granularity | string; // to allow dynamic key
+  }>({
     showDateRange: false,
     granularity: 'day' as Granularity,
     showTime: false,
     showTimeRange: false,
     privacy: 'visible',
   });
-
-  // const handleChangeCheck = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   updateValue(event.target.name, event.target.checked);
-  // };
 
   const updateValue = (key: string, value: string | boolean) => {
     setFormState({
@@ -150,24 +146,28 @@ export default function CreateForm({
     });
   };
 
+  const toggleValue = (key: string) => {
+    setFormState(prev => ({
+      ...formState,
+      [key]: !prev[key],
+    }));
+  };
+
+  const defaultTime = (hourOffset = 0) => ({
+    hour: currentDate.getHours() + hourOffset,
+    minute: currentDate.getMinutes(),
+    second: 0,
+    millisecond: 0,
+  });
+
   const form = useForm<z.infer<typeof FormSchema>>({
     defaultValues: {
       event_name: '',
       event_tags: [{ label: 'Event', value: 'event' }],
       event_privacy: 'visible',
       event_start_date: currentDate,
-      event_start_time: {
-        hour: currentDate.getHours(),
-        minute: currentDate.getMinutes(),
-        second: 0,
-        millisecond: 0,
-      },
-      event_end_time: {
-        hour: currentDate.getHours() + 1,
-        minute: currentDate.getMinutes(),
-        second: 0,
-        millisecond: 0,
-      },
+      event_start_time: defaultTime(),
+      event_end_time: defaultTime(1),
       event_range_date: {
         from: currentDate,
         to: new Date(new Date().setDate(currentDate.getDate() + 7)),
@@ -175,12 +175,14 @@ export default function CreateForm({
     },
     resolver: zodResolver(FormSchema),
   });
-
+  const imageRef = form.register("event_image");
   // test form return
   function onSubmit(values: z.infer<typeof FormSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
     console.log('submit', JSON.stringify(values, null, 2));
+
+    handleSubmit(values);
   }
 
   return (
@@ -242,6 +244,27 @@ export default function CreateForm({
                 </FormItem>
               )}
             />
+
+            <FormField
+              control={form.control}
+              name='event_image'
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Event image</FormLabel>
+                  <FormControl>
+                    <Input
+                      type='file'
+                      {...imageRef}
+                      onChange={(event) => {
+                        field.onChange(event.target?.files?.[0] ?? undefined);
+                      }}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
             <div className='flex gap-2 justify-between'>
               <div className={`${formState.showDateRange ? 'hidden' : null}`}>
                 <FormField
@@ -249,7 +272,7 @@ export default function CreateForm({
                   name='event_start_date'
                   render={({ field }) => (
                     <FormItem className='flex flex-col'>
-                      <FormLabel>Start date</FormLabel>
+                      <FormLabel>Event date</FormLabel>
                       <FormControl>
                         <DatePicker
                           value={field.value as Date}
@@ -287,10 +310,7 @@ export default function CreateForm({
                   <Switch
                     checked={formState.showDateRange}
                     onCheckedChange={() =>
-                      setFormState((prev) => ({
-                        ...prev,
-                        showDateRange: !prev.showDateRange,
-                      }))
+                      toggleValue('showDateRange')
                     }
                   />
                 </div>
@@ -349,10 +369,7 @@ export default function CreateForm({
                     <Switch
                       checked={formState.showTime}
                       onCheckedChange={() =>
-                        setFormState((prev) => ({
-                          ...prev,
-                          showTime: !prev.showTime,
-                        }))
+                        toggleValue('showTime')
                       }
                     />
                   </div>
@@ -362,11 +379,9 @@ export default function CreateForm({
                   <div className='flex flex-row items-center justify-between rounded-lg border py-2 px-4'>
                     <Switch
                       checked={formState.showTimeRange}
+                      disabled={!formState.showTime}
                       onCheckedChange={() =>
-                        setFormState((prev) => ({
-                          ...prev,
-                          showTimeRange: !prev.showTimeRange,
-                        }))
+                        toggleValue('showTimeRange')
                       }
                     />
                   </div>

@@ -1,91 +1,38 @@
 'use client';
-import React, { useEffect, useRef, useState, Suspense } from 'react';
+import React, {
+  useEffect,
+  useRef,
+  useState,
+  Suspense,
+  useCallback,
+} from 'react';
+
+// 3D EFFECTS
 import { useScroll, useTransform } from 'framer-motion';
 import { GeminiEffect } from '@/components/motion/GeminiEffect';
+import { positionView } from 'three/examples/jsm/nodes/Nodes.js';
 
-import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
-import { gql } from '@apollo/client';
+// SHADCN COMPONENTS
+import { Badge } from '@/components/ui/badge';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { TypographyP } from '@/components/ui/typography';
+import { Input } from '@/components/ui/input';
+
+// DATE / FORM FUNCTIONS
+import { addDays, format, addHours, differenceInCalendarDays, getDaysInMonth } from 'date-fns';
+import { date } from 'zod';
+
+// APP COMPONENTS
+import List from '@/components/display/events/List'
 
 export const dynamic = 'force-dynamic';
 
-type Event = {
-  id: string;
-  event_name: string;
-  event_start_date: string;
-  event_end_date: string;
-  event_start_time: string;
-  event_end_time: string;
-  event_description: string;
-  event_content: string;
-  event_tags: string;
-  event_privacy: string;
-  user_id: string;
-  user_full_name: string;
-};
-
-const query = gql`
-  query Events {
-    events {
-      id
-      event_name
-      event_start_date
-      event_end_date
-      event_start_time
-      event_end_time
-      event_description
-      event_content
-      event_tags
-      event_privacy
-      user_id
-      user_full_name
-    }
-  }
-`;
 
 function SuspenseFallback() {
-  return <div>Loading...</div>;
+  return <div>Loading events...</div>;
 }
 
-function List({ filterString }: { filterString: string }) {
-  const {
-    error,
-    data,
-  }: { error?: any; data: { events: [Event] } | undefined } = useSuspenseQuery(
-    query,
-    {
-      errorPolicy: 'all',
-    }
-  );
-  if (error) return <p>Error :(</p>;
-
-  return (
-    <ol>
-      {/* {JSON.stringify(data)} */}
-      {data &&
-        data.events
-          .filter((event) => {
-            console.log(JSON.stringify(Object.values(event)));
-            return JSON.stringify(Object.values(event))
-              .toLowerCase()
-              .includes(filterString.toLowerCase());
-          })
-          .map((event) => {
-            return (
-              <div key={event.id}>
-                {event.event_name} - {event.event_description}
-                <br /> by: {event.user_full_name}-{' '}
-                {new Date(event.event_start_date).toDateString()}-{' '}
-                {event.event_content}
-                <br />
-                {event.event_tags} - {event.event_privacy}
-                <br />
-                <br />
-              </div>
-            );
-          })}
-    </ol>
-  );
-}
 
 export default function Page() {
   const ref = useRef(null);
@@ -102,9 +49,14 @@ export default function Page() {
 
   const [form, setForm] = useState({ filter: '' });
 
+  const memoisedList = useCallback(
+    () => <List filterString={form.filter} />,
+    [form.filter]
+  );
+
   return (
     <div
-      className='h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-20 overflow-clip'
+      className='h-[400vh] bg-black w-full dark:border dark:border-white/[0.1] rounded-md relative pt-4 overflow-clip'
       ref={ref}
     >
       <GeminiEffect
@@ -118,15 +70,22 @@ export default function Page() {
       />
 
       <div className='sticky top-5'>
-        <input
-          onChange={(e) => {
-            setForm({ ...form, filter: e.target.value });
-          }}
-          value={form.filter}
-          placeholder={'filter by name'}
-        />
+        <div className='flex gap-2 justify-between mx-4'>
+          <Link href={'/line/create'}>
+            <Button>Create event</Button>
+          </Link>
+          <Input
+            type='text'
+            onChange={(e) => {
+              setForm({ ...form, filter: e.target.value });
+            }}
+            placeholder={'Filter events'}
+            value={form.filter}
+          />
+        </div>
         <Suspense fallback={<SuspenseFallback />}>
-          <List filterString={form.filter} />
+          {memoisedList()}
+          {memoisedList()}
         </Suspense>
       </div>
     </div>

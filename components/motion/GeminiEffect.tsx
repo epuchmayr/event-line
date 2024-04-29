@@ -19,12 +19,12 @@ export const GeminiEffect = ({
 }) => {
   return (
     <div className={cn('sticky top-20', className)}>
-      <p className='text-lg md:text-7xl font-normal pb-4 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-100 to-neutral-300'>
+      {/* <p className='text-lg md:text-7xl font-normal pb-4 text-center bg-clip-text text-transparent bg-gradient-to-b from-neutral-100 to-neutral-300'>
         {title || `Common Threads`}
-      </p>
-      <p className='text-xs md:text-xl font-normal text-center text-neutral-400 mt-4 max-w-lg mx-auto'>
+      </p> */}
+      {/* <p className='text-xs md:text-xl font-normal text-center text-neutral-400 mt-4 max-w-lg mx-auto'>
         {description || `Scroll this component to weave the threads`}
-      </p>
+      </p> */}
 
       <svg
         width='1440'
