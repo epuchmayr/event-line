@@ -34,6 +34,7 @@ import { date } from 'zod';
 // APP COMPONENTS
 import EventLine from '@/components/display/events/EventLine';
 import EventList from '@/components/display/events/EventList';
+import {EventContext} from '@/app/line/view/eventContext';
 
 export const dynamic = 'force-dynamic';
 
@@ -41,7 +42,6 @@ function SuspenseFallback() {
   return <div>Loading events...</div>;
 }
 
-export const EventContext = createContext({activeEvent: '', setActiveEvent: (event: string) => {}});
 
 
 export default function Page() {

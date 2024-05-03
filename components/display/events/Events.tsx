@@ -16,7 +16,7 @@ import { SubObject, EventType } from '@/types/global';
 import Tags from './Tags';
 
 
-import {EventContext} from '@/app/line/view/page';
+import {EventContext} from '@/app/line/view/eventContext';
 
 
 
