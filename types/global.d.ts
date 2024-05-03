@@ -1,6 +1,10 @@
 // types/global.d.ts
 
-export type EventType = {
+export type SubObject = {
+  [key: string]: string
+}
+
+export interface EventType extends SubObject {
   id: string;
   event_name: string;
   event_content?: string | null;
@@ -18,3 +22,4 @@ export type EventType = {
 };
 
 export type MarkerType = { name: string; position: number };
+

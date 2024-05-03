@@ -1,14 +1,20 @@
-'use client'
-import { useState } from "react";
+'use client';
+import { useState } from 'react';
 
-import { EventType } from '@/types/global'
+import { EventType } from '@/types/global';
 
 // GQL
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { gql } from '@apollo/client';
 
 // DATE / FORM FUNCTIONS
-import { addDays, format, addHours, differenceInCalendarDays, getDaysInMonth } from 'date-fns';
+import {
+  addDays,
+  format,
+  addHours,
+  differenceInCalendarDays,
+  getDaysInMonth,
+} from 'date-fns';
 
 // APP COMPONENTS
 import Events from './Events';
@@ -35,16 +41,18 @@ const query = gql`
   }
 `;
 
-export default function List({ filterString }: { filterString: string }) {
+export default function EventLine({
+  filterString,
+}: {
+  filterString: string;
+}) {
   const {
     error,
     data,
-  }: { error?: any; data: { events: [EventType] } | undefined } = useSuspenseQuery(
-    query,
-    {
+  }: { error?: any; data: { events: [EventType] } | undefined } =
+    useSuspenseQuery(query, {
       errorPolicy: 'all',
-    }
-  );
+    });
   if (error) return <p>Error :(</p>;
 
   // console.log(data)
@@ -301,16 +309,6 @@ export default function List({ filterString }: { filterString: string }) {
   // };
   if (!data) return <p>No data returned</p>;
 
-  // const filteredData = data.events.filter((event) => {
-  //   console.log(JSON.stringify(Object.values(event)));
-
-
-  //   return event
-  //   // return JSON.stringify(Object.values(event))
-  //   //   .toLowerCase()
-  //   //   .includes(filterString.toLowerCase());
-  // });
-
   // if (filteredData.length === 0) {
   //   return <p>No events found with that filter</p>;
   // }
@@ -325,7 +323,6 @@ export default function List({ filterString }: { filterString: string }) {
   let lastMonth = firstMonth;
   let work = 0;
 
-
   if (eventStartArray.length > 1) {
     lastItem = eventStartArray.at(-1) as number;
     work = (lastItem - firstItem) / 100;
@@ -334,7 +331,7 @@ export default function List({ filterString }: { filterString: string }) {
 
   ///////////////////////////////////////////////////////////
   // calculate month range
-  const lastMonthTimestamp = new Date().setMonth(lastMonth+1);
+  const lastMonthTimestamp = new Date().setMonth(lastMonth + 1);
   const firstMonthTimestamp = new Date().setMonth(firstMonth);
 
   const firstDay = new Date(firstItem).getDate();
@@ -345,9 +342,11 @@ export default function List({ filterString }: { filterString: string }) {
   const differenceInDays = differenceInCalendarDays(
     new Date(lastItem),
     new Date(firstItem)
-  )
+  );
 
-  const dayAsPercentage = (100 / (differenceInDays + daysInLastMonth)).toFixed(2);
+  const dayAsPercentage = (100 / (differenceInDays + daysInLastMonth)).toFixed(
+    2
+  );
   const leftMonthMargin = +dayAsPercentage * firstDay;
   const rightMonthMargin = +dayAsPercentage * (daysInLastMonth - lastDay);
 
@@ -357,38 +356,54 @@ export default function List({ filterString }: { filterString: string }) {
   //////////////////////////////////////////////////////////
 
   // calculate position of each event point
-  const eventPointPosition = eventStartArray.length > 1 ? eventStartArray.map((num) => {
-    return ((num - firstItem) / work).toFixed(2);
-  }) : ["1"]
+  const eventPointPosition =
+    eventStartArray.length > 1
+      ? eventStartArray.map((num) => {
+          return ((num - firstItem) / work).toFixed(2);
+        })
+      : ['1'];
   // console.log('work', work, eventPointPosition);
 
   // generate array of months
-  const monthsArray = Array.from({length: (lastMonth - firstMonth + 2)}, (e, i) => i + firstMonth + 1)
+  const monthsArray = Array.from(
+    { length: lastMonth - firstMonth + 2 },
+    (e, i) => i + firstMonth + 1
+  );
   function getMonthName(monthNumber: number) {
     const date = new Date();
+    date.setDate(1);
     date.setMonth(monthNumber - 1);
-  
+
     return date.toLocaleString('en-US', {
       month: 'long',
     });
   }
-  
+
   // calculate position of each month marker
   const markersCount = monthsArray.length;
   const markers = monthsArray.map((item, index) => {
-    // console.log('item', item, index, markersCount)
-    const markerPosition = (markersCount > 1) ? (index/(markersCount-1))*100 : 1
-    return { name: getMonthName(item), position: markerPosition }
-  })
+    const markerPosition =
+      markersCount > 1 ? (index / (markersCount - 1)) * 100 : 1;
+    return { name: getMonthName(item), position: markerPosition };
+  });
 
   // console.log('markers', markers, firstItem, lastItem, work, monthsArray, markersCount)
 
   return (
     <>
       <div className='border-t-2 mt-60 mb-96 mx-16 relative'>
-        <div className='relative'
-        style={{marginLeft: `${leftMonthMargin}%`, marginRight: `${rightMonthMargin}%`}}>
-          <Events data={data.events} position={eventPointPosition} filterString={filterString} />
+        <div
+          className='relative'
+          style={{
+            marginLeft: `${leftMonthMargin}%`,
+            marginRight: `${rightMonthMargin}%`,
+          }}
+        >
+          <Events
+            data={data.events}
+            position={eventPointPosition}
+            filterString={filterString}
+          />
         </div>
         <Markers data={markers} />
       </div>
