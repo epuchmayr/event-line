@@ -8,10 +8,10 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
-} from '@/components/ui/command';
+} from '@/features/ui/command';
 import { Command as CommandPrimitive, useCommandState } from 'cmdk';
 import { useEffect, forwardRef } from 'react';
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/features/ui/badge';
 import { cn } from '@/lib/utils';
 
 export interface Option {
@@ -374,7 +374,7 @@ const MultipleSelector = React.forwardRef<
                   key={option.value}
                   className={cn(
                     "data-[disabled='true']:bg-muted-foreground data-[disabled='true']:text-muted data-[disabled='true']:hover:bg-muted-foreground",
-                    "data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground",
+                    'data-[fixed]:bg-muted-foreground data-[fixed]:text-muted data-[fixed]:hover:bg-muted-foreground',
                     badgeClassName
                   )}
                   data-fixed={option.fixed}

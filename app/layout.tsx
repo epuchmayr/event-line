@@ -6,9 +6,11 @@ import { ClerkProvider } from '@clerk/nextjs';
 
 import { ApolloWrapper } from '@/lib/apollo-wrapper';
 
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from './ThemeProvider';
 
-const inter = Inter({ subsets: ['latin'], variable: "--font-sans", });
+import StoreProvider from './StoreProvider';
+
+const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const outfit = Outfit({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
@@ -35,7 +37,9 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ApolloWrapper>{children}</ApolloWrapper>
+            <ApolloWrapper>
+              <StoreProvider>{children}</StoreProvider>
+            </ApolloWrapper>
           </ThemeProvider>
         </body>
       </html>

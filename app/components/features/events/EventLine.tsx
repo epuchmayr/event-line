@@ -42,8 +42,10 @@ const query = gql`
 `;
 
 export default function EventLine({
+  eventData,
   filterString,
 }: {
+  eventData: { events: EventType[] };
   filterString: string;
 }) {
   const {
@@ -54,6 +56,8 @@ export default function EventLine({
       errorPolicy: 'all',
     });
   if (error) return <p>Error :(</p>;
+
+  // const data = eventData;
 
   // console.log(data)
 

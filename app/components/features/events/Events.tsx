@@ -8,17 +8,14 @@ import {
   CardTitle,
   CardContent,
   CardDescription,
-} from '@/components/ui/card';
-import { TypographyP } from '@/components/ui/typography';
+} from '@/app/components/ui/card';
+import { TypographyP } from '@/app/components/ui/typography';
 
 import { SubObject, EventType } from '@/types/global';
 
 import Tags from './Tags';
 
-
-import {EventContext} from '@/app/line/view/eventContext';
-
-
+import { EventContext } from '@/app/line/view/eventContext';
 
 export default function Events({
   data,
@@ -29,42 +26,43 @@ export default function Events({
   position: string[];
   filterString: string;
 }) {
-
-
-  const {activeEvent, setActiveEvent} = useContext(EventContext);
-
-
+  const { activeEvent, setActiveEvent } = useContext(EventContext);
 
   return (
     <>
       {data.map((item: EventType, index: number) => {
-
         // create a subset user data
-        var subset = ['event_name', 'event_content', 'event_description', 'user_full_name']
-        .reduce(function (subObj: SubObject, key: string) {
-          if (key in item)
-          subObj[key] = item[key];
+        var subset = [
+          'event_name',
+          'event_content',
+          'event_description',
+          'user_full_name',
+        ].reduce(function (subObj: SubObject, key: string) {
+          if (key in item) subObj[key] = item[key];
           return subObj;
         }, {});
 
         // filter the subset object
-        const isFiltered =
-          JSON.stringify(Object.values(subset)).toLowerCase().includes(filterString.toLowerCase());
+        const isFiltered = JSON.stringify(Object.values(subset))
+          .toLowerCase()
+          .includes(filterString.toLowerCase());
 
         // check if the current event is active
-        const currentEvent = (activeEvent === item.id)
+        const currentEvent = activeEvent === item.id;
 
         return (
           <div
             key={item.id}
-            className={`group absolute hover:z-10 focus-within:z-10 odd:top-8 even:bottom-8 translate-x-[-50%] transition-all duration-300 ease-in-out ${(isFiltered) ? 'z-[1]' : 'z-0'}`}
+            className={`group absolute hover:z-10 focus-within:z-10 odd:top-8 even:bottom-8 translate-x-[-50%] transition-all duration-300 ease-in-out ${
+              isFiltered ? 'z-[1]' : 'z-0'
+            }`}
             style={{
               left: `${position[index]}%`,
               opacity: isFiltered ? 1 : 0.1,
               zIndex: currentEvent ? 10 : undefined,
               pointerEvents: isFiltered ? 'auto' : 'none',
-              }}
-              onPointerEnter={() => setActiveEvent(item.id)}
+            }}
+            onPointerEnter={() => setActiveEvent(item.id)}
           >
             <div
               className={`absolute ${
@@ -73,13 +71,17 @@ export default function Events({
             >
               ⚪
             </div>
-            <div
-              className={`absolute h-14 border-l-2 border-white ${
-                index % 2 === 0 ? 'top-[-1.5rem]' : 'bottom-[-1.5rem]'
-              } left-1/2 translate-x-[-50%]`}
-            ></div>
+            
+              <div
+                className={`absolute h-14 px-1.5 ${
+                  index % 2 === 0 ? 'top-[-1.5rem]' : 'bottom-[-1.5rem]'
+                } left-1/2 translate-x-[-50%]`}
+              ><div className='h-full border-l-2 border-white'></div>
+            </div>
             <Card
-              className={`group/card w-[180px] group-hover:w-[350px] focus:w-[350px] transition-all duration-300 ease-in-out scale-75 group-hover:scale-100 focus:scale-100 ${(isFiltered) ? '' : 'scale-50'} ${currentEvent ? 'bg-slate-800' : ''}`}
+              className={`group/card w-[180px] group-hover:w-[350px] focus:w-[350px] transition-all duration-300 ease-in-out scale-75 group-hover:scale-100 focus:scale-100 ${
+                isFiltered ? '' : 'scale-50'
+              } ${currentEvent ? 'bg-slate-800' : ''}`}
               tabIndex={isFiltered ? 0 : -1}
               onFocus={() => setActiveEvent(item.id)}
             >
@@ -94,11 +96,9 @@ export default function Events({
               </CardHeader>
               <CardContent className='truncate hidden group-hover:block group-focus/card:block'>
                 {/* <TypographyP>{item.event_content}</TypographyP> */}
-                  <CardDescription className='mt-5'>
-                    <span>
-                      {new Date(item.event_start_date).toDateString()}
-                    </span>
-                  </CardDescription>
+                <CardDescription className='mt-5'>
+                  <span>{new Date(item.event_start_date).toDateString()}</span>
+                </CardDescription>
               </CardContent>
               {/* <CardFooter className='flex justify-between truncate'>
                 <p>{item.user_full_name}</p>

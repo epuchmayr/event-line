@@ -5,16 +5,16 @@ import Image from 'next/image';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { gql, useMutation } from '@apollo/client';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/features/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/components/ui/card';
+} from '@/features/ui/card';
 
-import { Input } from '@/components/ui/input';
+import { Input } from '@/features/ui/input';
 import {
   Select,
   SelectContent,
@@ -22,9 +22,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Switch } from '@/components/ui/switch';
-import { Textarea } from '@/components/ui/textarea';
+} from '@/features/ui/select';
+import { Switch } from '@/features/ui/switch';
+import { Textarea } from '@/features/ui/textarea';
 
 import {
   Form,
@@ -33,14 +33,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
-import { Separator } from '@/components/ui/separator';
-import { FloatingLabelInput } from '@/components/ui/floating-label-input';
+} from '@/features/ui/form';
+import MultipleSelector, { Option } from '@/features/ui/multiple-selector';
+import { Separator } from '@/features/ui/separator';
+import { FloatingLabelInput } from '@/features/ui/floating-label-input';
 import { Granularity } from '@react-types/datepicker';
-import { DatePickerWithRange } from '@/components/ui/daterange-picker';
-import { DatePicker } from '@/components/ui/date-picker';
-import { TimePicker } from '@/components/ui/datetime-picker';
+import { DatePickerWithRange } from '@/features/ui/daterange-picker';
+import { DatePicker } from '@/features/ui/date-picker';
+import { TimePicker } from '@/features/ui/datetime-picker';
 
 import { TimeValue } from 'react-aria';
 
@@ -151,7 +151,7 @@ export default function CreateForm({
   };
 
   const toggleValue = (key: string) => {
-    setFormState(prev => ({
+    setFormState((prev) => ({
       ...formState,
       [key]: !prev[key],
     }));
@@ -313,9 +313,7 @@ export default function CreateForm({
                 <div className='flex flex-row items-center justify-between rounded-lg border py-2 px-4'>
                   <Switch
                     checked={formState.showDateRange}
-                    onCheckedChange={() =>
-                      toggleValue('showDateRange')
-                    }
+                    onCheckedChange={() => toggleValue('showDateRange')}
                   />
                 </div>
               </FormItem>
@@ -372,9 +370,7 @@ export default function CreateForm({
                   <div className='flex flex-row items-center justify-between rounded-lg border py-2 px-4'>
                     <Switch
                       checked={formState.showTime}
-                      onCheckedChange={() =>
-                        toggleValue('showTime')
-                      }
+                      onCheckedChange={() => toggleValue('showTime')}
                     />
                   </div>
                 </FormItem>
@@ -384,9 +380,7 @@ export default function CreateForm({
                     <Switch
                       checked={formState.showTimeRange}
                       disabled={!formState.showTime}
-                      onCheckedChange={() =>
-                        toggleValue('showTimeRange')
-                      }
+                      onCheckedChange={() => toggleValue('showTimeRange')}
                     />
                   </div>
                 </FormItem>

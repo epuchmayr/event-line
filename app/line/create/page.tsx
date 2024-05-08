@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 
 import { gql, useMutation } from '@apollo/client';
-import CreateForm from '@/components/form/create-event/CreateForm';
+import CreateForm from '@/app/components/form/create-event/CreateForm';
 import { useRouter } from 'next/navigation';
 import { EventType } from '@/types/global';
 
@@ -73,7 +73,7 @@ export default function Page() {
             event_name: data.event_name,
             event_image: JSON.stringify(data.event_image, null, 2),
             event_start_date: data.event_start_date,
-    //         event_end_date: data.event_end_date,
+            //         event_end_date: data.event_end_date,
             event_range_date: JSON.stringify(data.event_range_date, null, 2),
             event_start_time: JSON.stringify(data.event_start_time, null, 2),
             event_end_time: JSON.stringify(data.event_end_time, null, 2),

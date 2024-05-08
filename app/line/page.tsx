@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { Canvas, useFrame, ThreeElements } from '@react-three/fiber';
 import { OrbitControls, Stars } from '@react-three/drei';
 
-import { Button } from '@/components/ui/button';
+import { Button } from '@/app/components/ui/button';
 
 function Box(props: ThreeElements['mesh']) {
   const ref = useRef<THREE.Mesh>(null!);

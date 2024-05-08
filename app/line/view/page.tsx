@@ -6,20 +6,20 @@ import React, {
   Suspense,
   useCallback,
   ReactNode,
-  createContext
+  createContext,
 } from 'react';
 
 // 3D EFFECTS
 import { useScroll, useTransform } from 'framer-motion';
-import { GeminiEffect } from '@/components/motion/GeminiEffect';
+import { GeminiEffect } from '@/app/components/motion/GeminiEffect';
 import { positionView } from 'three/examples/jsm/nodes/Nodes.js';
 
 // SHADCN COMPONENTS
-import { Badge } from '@/components/ui/badge';
+import { Badge } from '@/app/components/ui/badge';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
-import { TypographyP } from '@/components/ui/typography';
-import { Input } from '@/components/ui/input';
+import { Button } from '@/app/components/ui/button';
+import { TypographyP } from '@/app/components/ui/typography';
+import { Input } from '@/app/components/ui/input';
 
 // DATE / FORM FUNCTIONS
 import {
@@ -32,9 +32,10 @@ import {
 import { date } from 'zod';
 
 // APP COMPONENTS
-import EventLine from '@/components/display/events/EventLine';
-import EventList from '@/components/display/events/EventList';
-import {EventContext} from '@/app/line/view/eventContext';
+import EventLine from '@/app/components/features/events/EventLine';
+import EventList from '@/app/components/features/events/EventList';
+import { EventContext } from '@/app/line/view/eventContext';
+import EventGroup from '@/app/components/features/events/EventGroup';
 
 export const dynamic = 'force-dynamic';
 
@@ -60,10 +61,10 @@ export default function Page() {
   const [form, setForm] = useState({ filter: '' });
   const [activeEvent, setActiveEvent] = useState('');
 
-  const memoisedEventLine = useCallback(
-    () => <EventLine filterString={form.filter} />,
-    [form.filter]
-  );
+  // const memoisedEventLine = useCallback(
+  //   () => <EventLine filterString={form.filter} />,
+  //   [form.filter]
+  // );
 
   const memoisedEventList = useCallback(
     () => <EventList filterString={form.filter} />,
@@ -99,20 +100,24 @@ export default function Page() {
           placeholder={'Search events'}
           value={form.filter}
         />
+        <Button onClick={(e) => {
+            setForm({ ...form, filter: '' });
+          }}>X</Button>
       </div>
-      <EventContext.Provider value={{activeEvent, setActiveEvent}}>
-      <div className='flex flex-auto gap-2 px-4 overflow-hidden'>
-        <div className='flex-auto'>
-          <Suspense fallback={<SuspenseFallback />}>
-            {memoisedEventLine()}
-          </Suspense>
-        </div>
-        <div className='w-72 overflow-auto'>
-          <Suspense fallback={<SuspenseFallback />}>
-            {memoisedEventList()}
-          </Suspense>
-        </div>
-      </div>
+      <EventContext.Provider value={{ activeEvent, setActiveEvent }}>
+        {/* <div className='flex flex-auto gap-2 px-4 overflow-hidden'>
+          <div className='flex-auto'>
+            <Suspense fallback={<SuspenseFallback />}>
+              {memoisedEventLine()}
+            </Suspense>
+          </div>
+          <div className='w-72 overflow-auto'>
+            <Suspense fallback={<SuspenseFallback />}>
+              {memoisedEventList()}
+            </Suspense>
+          </div>
+        </div> */}
+        <EventGroup filterString={form.filter} />
       </EventContext.Provider>
       {/* </div> */}
     </div>
