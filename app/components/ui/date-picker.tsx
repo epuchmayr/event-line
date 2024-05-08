@@ -5,9 +5,9 @@ import { format } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 
 import { cn } from '@/lib/utils';
-import { Button } from '@/features/ui/button';
-import { Calendar } from '@/features/ui/calendar';
-import { Popover, PopoverContent, PopoverTrigger } from '@/features/ui/popover';
+import { Button } from './button';
+import { Calendar } from './calendar';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import {
   ControllerProps,
   ControllerRenderProps,

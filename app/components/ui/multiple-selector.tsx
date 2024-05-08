@@ -8,10 +8,10 @@ import {
   CommandGroup,
   CommandItem,
   CommandList,
-} from '@/features/ui/command';
+} from './command';
 import { Command as CommandPrimitive, useCommandState } from 'cmdk';
 import { useEffect, forwardRef } from 'react';
-import { Badge } from '@/features/ui/badge';
+import { Badge } from './badge';
 import { cn } from '@/lib/utils';
 
 export interface Option {

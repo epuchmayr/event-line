@@ -2,8 +2,8 @@
 import * as React from 'react';
 
 import { cn } from '@/lib/utils';
-import { Input } from '@/features/ui/input';
-import { Label } from '@/features/ui/label';
+import { Input } from './input';
+import { Label } from './label';
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {}

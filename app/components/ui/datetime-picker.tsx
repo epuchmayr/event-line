@@ -43,8 +43,8 @@ import {
   useTimeFieldState,
 } from 'react-stately';
 import { cn } from '@/lib/utils';
-import { Button } from '@/features/ui/button';
-import { Popover, PopoverContent, PopoverTrigger } from '@/features/ui/popover';
+import { Button } from './button';
+import { Popover, PopoverContent, PopoverTrigger } from './popover';
 import {
   CalendarDate,
   createCalendar,
