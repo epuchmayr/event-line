@@ -59,7 +59,7 @@ export default function Page() {
   // const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
 
   const [form, setForm] = useState({ filter: '' });
-  const [activeEvent, setActiveEvent] = useState('');
+  const [activeEvent, setActiveEvent] = useState({id: '', event_start_date: ''});
 
   // const memoisedEventLine = useCallback(
   //   () => <EventLine filterString={form.filter} />,

@@ -395,7 +395,7 @@ export default function EventLine({
 
   return (
     <>
-      <div className='border-t-2 mt-60 mb-96 mx-16 relative'>
+      <div className='border-t-2 mt-60 mb-40 mx-16 relative'>
         <div
           className='relative'
           style={{

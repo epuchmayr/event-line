@@ -5,6 +5,7 @@ import React, {
   useState,
   Suspense,
   useCallback,
+  useContext,
   ReactNode,
   createContext,
 } from 'react';
@@ -29,6 +30,15 @@ import Link from 'next/link';
 import { Button } from '@/app/components/ui/button';
 import { TypographyP } from '@/app/components/ui/typography';
 import { Input } from '@/app/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/app/components/ui/select';
+import CalendarFull from '@/app/components/ui/calendar-full';
 
 // DATE / FORM FUNCTIONS
 import {
@@ -45,7 +55,7 @@ import EventLine from './EventLine';
 import EventList from './EventList';
 import { EventContext } from '@/app/line/view/eventContext';
 
-import { EventType } from '@/types/global';
+import { EventType, SubObject } from '@/types/global';
 
 // GQL
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
@@ -102,6 +112,16 @@ const testData = {
 };
 
 export default function EventGroup({ filterString }: { filterString: string }) {
+  const [currentView, setCurrentView] = useState<'TIMELINE' | 'CALENDAR'>(
+    'TIMELINE'
+  );
+  const [calendarView, setCalendarView] = useState<
+    'MONTH' | 'DAY' | 'WEEK_TIME'
+  >('MONTH');
+
+  const [currentDate, setCurrentDate] = useState<string>(new Date().toISOString());
+
+  const { activeEvent, setActiveEvent } = useContext(EventContext);
   const events = useSelector(selectEvents);
 
   // console.log(events);
@@ -122,17 +142,100 @@ export default function EventGroup({ filterString }: { filterString: string }) {
     useSuspenseQuery(query, {
       errorPolicy: 'all',
     });
-  if (error) return <p>Error :(</p>;
+  if (error) return <p>Unable to retrieve events, try refreshing :(</p>;
+
+  const calendarData =
+    data &&
+    data.events?.map((event) => {
+
+    // create a subset user data
+    var subset = [
+      'event_name',
+      'event_content',
+      'event_description',
+      'user_full_name',
+    ].reduce(function (subObj: SubObject, key: string) {
+      if (key in event) subObj[key] = event[key];
+      return subObj;
+    }, {});
+
+    // filter the subset object
+    const isFiltered = JSON.stringify(Object.values(subset))
+      .toLowerCase()
+      .includes(filterString.toLowerCase());
+      
+      return isFiltered && {
+        id: event.id,
+        startTime: event.event_start_date,
+        endTime: event.event_end_date ?? event.event_start_date,
+        title: event.event_name,
+      };
+    });
+
+    useEffect(() => {
+      if (activeEvent.event_start_date) {
+        console.log('activeEvent', activeEvent.event_start_date);
+        setCurrentDate(activeEvent.event_start_date)
+      }
+    }, [activeEvent])
 
   return (
     <>
       <div className='flex flex-auto gap-2 px-4 overflow-hidden'>
-        <div className='flex-auto'>
-          <Suspense fallback={<SuspenseFallback />}>
-            {memoisedEventLine()}
-          </Suspense>
+        <div className='flex-auto flex flex-col'>
+          <div className='flex gap-2 pb-4'>
+            <Button
+              variant={currentView === 'TIMELINE' ? 'secondary' : 'outline'}
+              onClick={() => setCurrentView('TIMELINE')}
+            >
+              Timeline
+            </Button>
+            <Button
+              variant={currentView === 'CALENDAR' ? 'secondary' : 'outline'}
+              onClick={() => setCurrentView('CALENDAR')}
+            >
+              Calendar
+            </Button>
+            {currentView === 'CALENDAR' ? (
+              <Select
+                value={calendarView}
+                onValueChange={(e) => {
+                  setCalendarView(e as typeof calendarView);
+                }}
+              >
+                <SelectTrigger className='w-[180px]'>
+                  <SelectValue placeholder='Select privacy' />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectItem value='MONTH'>Month</SelectItem>
+                    <SelectItem value='WEEK_TIME'>Week</SelectItem>
+                    <SelectItem value='DAY'>Day</SelectItem>
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            ) : null}
+            {/* <Button onClick={() => setCurrentDate('2023-06-02')}>Set date</Button> */}
+          </div>
+          <div className='flex-auto overflow-auto'>
+            {currentView === 'TIMELINE' ? (
+              <Suspense fallback={<SuspenseFallback />}>
+                {memoisedEventLine()}
+              </Suspense>
+            ) : (
+              <>
+                <CalendarFull
+                  currentView={calendarView}
+                  data={calendarData as Record<string, any>[]}
+                  onItemClick={setActiveEvent}
+                  currentDate={currentDate}
+                  setCurrentDate={setCurrentDate}
+                />
+              </>
+            )}
+          </div>
         </div>
-        <div className='w-72 overflow-auto'>
+        <div className='w-72 flex-none overflow-auto'>
           <Suspense fallback={<SuspenseFallback />}>
             {memoisedEventList()}
           </Suspense>

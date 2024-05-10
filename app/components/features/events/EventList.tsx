@@ -109,7 +109,7 @@ export default function EventList({ filterString }: { filterString: string }) {
             .toLowerCase()
             .includes(filterString.toLowerCase());
 
-          const currentEvent = activeEvent === item.id;
+          const currentEvent = activeEvent.id === item.id;
 
           if (eventRefs.current && currentEvent) {
             // console.log('scrolling into view', eventRefs.current, index, eventRefs.current[index])
@@ -120,7 +120,7 @@ export default function EventList({ filterString }: { filterString: string }) {
             <div key={'List_' + item.id}>
               <Card
                 className={`rounded-none border-t-0 ${
-                  activeEvent === item.id ? 'bg-slate-800' : ''
+                  activeEvent.id === item.id ? 'bg-slate-800' : ''
                 }`}
                 style={{
                   opacity: isFiltered ? 1 : 0.75,
@@ -129,10 +129,10 @@ export default function EventList({ filterString }: { filterString: string }) {
                   pointerEvents: isFiltered ? 'auto' : 'none',
                 }}
                 tabIndex={isFiltered ? 0 : -1}
-                onPointerEnter={() => setActiveEvent(item.id)}
+                onPointerEnter={() => setActiveEvent(item)}
                 onFocus={() => {
                   setHasFocus(true);
-                  setActiveEvent(item.id);
+                  setActiveEvent(item);
                 }}
                 onBlur={() => setHasFocus(false)}
                 ref={eventRefs.current[index]}
@@ -152,7 +152,9 @@ export default function EventList({ filterString }: { filterString: string }) {
                   <TypographyP>{item.event_content}</TypographyP>
                   <CardDescription className='mt-5'>
                     <span>
-                      {new Date(item.event_start_date).toDateString()}
+                      {new Date(item.event_start_date).toDateString()}<br />
+                      {item.event_start_time && `${String(JSON.parse(item.event_start_time).hour % 12).padStart(2, '0')}:${String(JSON.parse(item.event_start_time).minute).padStart(2, '0')} ${JSON.parse(item.event_start_time).hour >= 12 ? 'PM' : 'AM'}`}
+                      {item.event_end_time && ` - ${String(JSON.parse(item.event_end_time).hour % 12).padStart(2, '0')}:${String(JSON.parse(item.event_end_time).minute).padStart(2, '0')} ${JSON.parse(item.event_end_time).hour >= 12 ? 'PM' : 'AM'}`}
                     </span>
                   </CardDescription>
                 </CardContent>

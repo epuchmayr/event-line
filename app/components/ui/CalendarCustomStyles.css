@@ -1,0 +1,45 @@
+/*  
+With the current hard-coded heights
+might be very difficult to make it responsive vertically
+*/
+/* .calendar--left-margin {
+  height: 100%;
+}
+
+.week-time-view-inside {
+background-color: #f8faff;
+}
+
+.week-time-view-inside .week-time-week {
+  grid-template-rows: repeat(24, minmax(10px, 22px));
+}
+
+.week-time-view-inside .week-time-week__cover {
+  grid-template-rows: repeat(25, minmax(10px, 22px));
+}
+
+.week-time-view-inside .week-time-week__border-bottom {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.week-time-view-inside .week-time-week__border-bottom-row {
+  flex: 1 1 auto;
+}
+
+.week-time-view-inside .week-time-week__column {
+  grid-template-rows: repeat(1440, minmax(1.7%, auto));
+}*/
+
+.item {
+  cursor: pointer;
+}
+
+
+
+/* week inplace *
+.week-time-in-place-view-inside .week-in-place-row {
+  grid-template-rows: repeat(24, minmax(20px, auto));
+
+} */

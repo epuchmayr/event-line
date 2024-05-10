@@ -48,7 +48,7 @@ export default function Events({
           .includes(filterString.toLowerCase());
 
         // check if the current event is active
-        const currentEvent = activeEvent === item.id;
+        const currentEvent = activeEvent.id === item.id;
 
         return (
           <div
@@ -62,7 +62,7 @@ export default function Events({
               zIndex: currentEvent ? 10 : undefined,
               pointerEvents: isFiltered ? 'auto' : 'none',
             }}
-            onPointerEnter={() => setActiveEvent(item.id)}
+            onPointerEnter={() => setActiveEvent(item)}
           >
             <div
               className={`absolute ${
@@ -83,7 +83,7 @@ export default function Events({
                 isFiltered ? '' : 'scale-50'
               } ${currentEvent ? 'bg-slate-800' : ''}`}
               tabIndex={isFiltered ? 0 : -1}
-              onFocus={() => setActiveEvent(item.id)}
+              onFocus={() => setActiveEvent(item)}
             >
               <CardHeader>
                 <CardTitle className='truncate'>{item.event_name}</CardTitle>
