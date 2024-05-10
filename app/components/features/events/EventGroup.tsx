@@ -119,7 +119,9 @@ export default function EventGroup({ filterString }: { filterString: string }) {
     'MONTH' | 'DAY' | 'WEEK_TIME'
   >('MONTH');
 
-  const [currentDate, setCurrentDate] = useState<string>(new Date().toISOString());
+  const [currentDate, setCurrentDate] = useState<string>(
+    new Date().toISOString()
+  );
 
   const { activeEvent, setActiveEvent } = useContext(EventContext);
   const events = useSelector(selectEvents);
@@ -135,6 +137,14 @@ export default function EventGroup({ filterString }: { filterString: string }) {
     () => <EventList filterString={filterString} />,
     [filterString]
   );
+
+  useEffect(() => {
+    if (activeEvent.event_start_date) {
+      console.log('activeEvent', activeEvent.event_start_date);
+      setCurrentDate(activeEvent.event_start_date);
+    }
+  }, [activeEvent]);
+
   const {
     error,
     data,
@@ -147,37 +157,31 @@ export default function EventGroup({ filterString }: { filterString: string }) {
   const calendarData =
     data &&
     data.events?.map((event) => {
+      // create a subset user data
+      var subset = [
+        'event_name',
+        'event_content',
+        'event_description',
+        'user_full_name',
+      ].reduce(function (subObj: SubObject, key: string) {
+        if (key in event) subObj[key] = event[key];
+        return subObj;
+      }, {});
 
-    // create a subset user data
-    var subset = [
-      'event_name',
-      'event_content',
-      'event_description',
-      'user_full_name',
-    ].reduce(function (subObj: SubObject, key: string) {
-      if (key in event) subObj[key] = event[key];
-      return subObj;
-    }, {});
+      // filter the subset object
+      const isFiltered = JSON.stringify(Object.values(subset))
+        .toLowerCase()
+        .includes(filterString.toLowerCase());
 
-    // filter the subset object
-    const isFiltered = JSON.stringify(Object.values(subset))
-      .toLowerCase()
-      .includes(filterString.toLowerCase());
-      
-      return isFiltered && {
-        id: event.id,
-        startTime: event.event_start_date,
-        endTime: event.event_end_date ?? event.event_start_date,
-        title: event.event_name,
-      };
+      return (
+        isFiltered && {
+          id: event.id,
+          startTime: event.event_start_date,
+          endTime: event.event_end_date ?? event.event_start_date,
+          title: event.event_name,
+        }
+      );
     });
-
-    useEffect(() => {
-      if (activeEvent.event_start_date) {
-        console.log('activeEvent', activeEvent.event_start_date);
-        setCurrentDate(activeEvent.event_start_date)
-      }
-    }, [activeEvent])
 
   return (
     <>
