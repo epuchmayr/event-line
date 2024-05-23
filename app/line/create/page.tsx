@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useUser } from '@clerk/nextjs';
 
 import { gql, useMutation } from '@apollo/client';
-import CreateForm from '@/app/components/form/create-event/CreateForm';
+import CreateForm from '@/components/form/create-event/CreateForm';
 import { useRouter } from 'next/navigation';
 import { EventType } from '@/types/global';
 

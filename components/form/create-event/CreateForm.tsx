@@ -5,16 +5,16 @@ import Image from 'next/image';
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
 import { gql, useMutation } from '@apollo/client';
 
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from '@/app/components/ui/card';
+} from '@/components/ui/card';
 
-import { Input } from '@/app/components/ui/input';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -22,9 +22,9 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/app/components/ui/select';
-import { Switch } from '@/app/components/ui/switch';
-import { Textarea } from '@/app/components/ui/textarea';
+} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
+import { Textarea } from '@/components/ui/textarea';
 
 import {
   Form,
@@ -33,14 +33,14 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/app/components/ui/form';
-import MultipleSelector, { Option } from '@/app/components/ui/multiple-selector';
-import { Separator } from '@/app/components/ui/separator';
-import { FloatingLabelInput } from '@/app/components/ui/floating-label-input';
+} from '@/components/ui/form';
+import MultipleSelector, { Option } from '@/components/ui/multiple-selector';
+import { Separator } from '@/components/ui/separator';
+import { FloatingLabelInput } from '@/components/ui/floating-label-input';
 import { Granularity } from '@react-types/datepicker';
-import { DatePickerWithRange } from '@/app/components/ui/daterange-picker';
-import { DatePicker } from '@/app/components/ui/date-picker';
-import { TimePicker } from '@/app/components/ui/datetime-picker';
+import { DatePickerWithRange } from '@/components/ui/daterange-picker';
+import { DatePicker } from '@/components/ui/date-picker';
+import { TimePicker } from '@/components/ui/datetime-picker';
 
 import { TimeValue } from 'react-aria';
 

@@ -1,11 +1,11 @@
 import Link from 'next/link';
 
 import { auth, currentUser } from '@clerk/nextjs';
-import { BackgroundBeams } from '@/app/components/ui/background-beams';
+import { BackgroundBeams } from '@/components/ui/background-beams';
 
 import styles from './page.module.css';
 
-import Auth from '@/app/components/HeaderAuth';
+import Auth from '@/components/HeaderAuth';
 
 export default async function Home() {
   // Get the userId from auth() -- if null, the user is not signed in
