@@ -8,8 +8,6 @@ import { ApolloWrapper } from '@/lib/apollo-wrapper';
 
 import { ThemeProvider } from './ThemeProvider';
 
-import StoreProvider from './StoreProvider';
-
 const inter = Inter({ subsets: ['latin'], variable: '--font-sans' });
 const outfit = Outfit({
   subsets: ['latin'],
@@ -37,9 +35,7 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <ApolloWrapper>
-              <StoreProvider>{children}</StoreProvider>
-            </ApolloWrapper>
+            <ApolloWrapper>{children}</ApolloWrapper>
           </ThemeProvider>
         </body>
       </html>

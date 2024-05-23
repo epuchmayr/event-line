@@ -8,8 +8,6 @@ import { OrbitControls, Stars } from '@react-three/drei';
 import { Button } from '@/components/ui/button';
 
 
-import { useGetPokemonByNameQuery } from '@/services/events'
-
 function Box(props: ThreeElements['mesh']) {
   const ref = useRef<THREE.Mesh>(null!);
   const [hovered, hover] = useState(false);
@@ -36,24 +34,9 @@ function Box(props: ThreeElements['mesh']) {
 }
 
 export default function Page() {
-    // Using a query hook automatically fetches data and returns query values
-    // const { data, error, isLoading } = useGetPokemonByNameQuery('mewtwo')
-    // Individual hooks are also accessible under the generated endpoints:
-    // const { data, error, isLoading } = pokemonApi.endpoints.getPokemonByName.useQuery('bulbasaur')
   
   return (
     <div className='h-screen'>
-      
-      {/* {error ? (
-        <>Oh no, there was an error</>
-      ) : isLoading ? (
-        <>Loading...</>
-      ) : data ? (
-        <>
-          <h3>{data.species.name}</h3>
-          <img src={data.sprites.front_shiny} alt={data.species.name} />
-        </>
-      ) : null} */}
       <Link href={'/line/create'}>
         <Button>Create</Button>
       </Link>
