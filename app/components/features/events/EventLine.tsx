@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 
-import { EventType } from '@/types/global';
+import { EventType, FilteredEventType } from '@/types/global';
 
 // GQL
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
@@ -20,42 +20,42 @@ import {
 import Events from './Events';
 import Markers from './Markers';
 
-const query = gql`
-  query Events {
-    events(order_by: { event_start_date: asc }) {
-      id
-      event_name
-      event_content
-      event_description
-      event_image
-      event_start_date
-      event_end_date
-      event_range_date
-      event_start_time
-      event_end_time
-      event_tags
-      event_privacy
-      user_id
-      user_full_name
-    }
-  }
-`;
+// const query = gql`
+//   query Events {
+//     events(order_by: { event_start_date: asc }) {
+//       id
+//       event_name
+//       event_content
+//       event_description
+//       event_image
+//       event_start_date
+//       event_end_date
+//       event_range_date
+//       event_start_time
+//       event_end_time
+//       event_tags
+//       event_privacy
+//       user_id
+//       user_full_name
+//     }
+//   }
+// `;
 
 export default function EventLine({
   eventData,
   filterString,
 }: {
-  eventData: { events: EventType[] };
+  eventData: { events: FilteredEventType[] };
   filterString: string;
 }) {
-  const {
-    error,
-    data,
-  }: { error?: any; data: { events: [EventType] } | undefined } =
-    useSuspenseQuery(query, {
-      errorPolicy: 'all',
-    });
-  if (error) return <p>Error :(</p>;
+  // const {
+  //   error,
+  //   data,
+  // }: { error?: any; data: { events: [EventType] } | undefined } =
+  //   useSuspenseQuery(query, {
+  //     errorPolicy: 'all',
+  //   });
+  // if (error) return <p>Error :(</p>;
 
   // const data = eventData;
 
@@ -311,13 +311,13 @@ export default function EventLine({
   //     },
   //   ],
   // };
-  if (!data) return <p>No data returned</p>;
+  if (!eventData) return <p>No data returned</p>;
 
   // if (filteredData.length === 0) {
   //   return <p>No events found with that filter</p>;
   // }
-
-  const eventStartArray = data.events.map((event) =>
+  
+  const eventStartArray = eventData.events.map((event) =>
     new Date(event.event_start_date).getTime()
   );
 
@@ -404,7 +404,7 @@ export default function EventLine({
           }}
         >
           <Events
-            data={data.events}
+            data={eventData.events}
             position={eventPointPosition}
             filterString={filterString}
           />

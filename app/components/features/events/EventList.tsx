@@ -92,7 +92,7 @@ export default function EventList({ filterString }: { filterString: string }) {
         onPointerEnter={() => setHasFocus(true)}
         onPointerLeave={() => setHasFocus(false)}
       >
-        {data.events.map((item: EventType, index) => {
+        {[...data.events].reverse().map((item: EventType, index) => {
           // create a subset user data
           var subset = [
             'event_name',
@@ -152,9 +152,28 @@ export default function EventList({ filterString }: { filterString: string }) {
                   <TypographyP>{item.event_content}</TypographyP>
                   <CardDescription className='mt-5'>
                     <span>
-                      {new Date(item.event_start_date).toDateString()}<br />
-                      {item.event_start_time && `${String(JSON.parse(item.event_start_time).hour % 12).padStart(2, '0')}:${String(JSON.parse(item.event_start_time).minute).padStart(2, '0')} ${JSON.parse(item.event_start_time).hour >= 12 ? 'PM' : 'AM'}`}
-                      {item.event_end_time && ` - ${String(JSON.parse(item.event_end_time).hour % 12).padStart(2, '0')}:${String(JSON.parse(item.event_end_time).minute).padStart(2, '0')} ${JSON.parse(item.event_end_time).hour >= 12 ? 'PM' : 'AM'}`}
+                      {new Date(item.event_start_date).toDateString()}
+                      <br />
+                      {item.event_start_time &&
+                        `${String(
+                          JSON.parse(item.event_start_time).hour % 12
+                        ).padStart(2, '0')}:${String(
+                          JSON.parse(item.event_start_time).minute
+                        ).padStart(2, '0')} ${
+                          JSON.parse(item.event_start_time).hour >= 12
+                            ? 'PM'
+                            : 'AM'
+                        }`}
+                      {item.event_end_time &&
+                        ` - ${String(
+                          JSON.parse(item.event_end_time).hour % 12
+                        ).padStart(2, '0')}:${String(
+                          JSON.parse(item.event_end_time).minute
+                        ).padStart(2, '0')} ${
+                          JSON.parse(item.event_end_time).hour >= 12
+                            ? 'PM'
+                            : 'AM'
+                        }`}
                     </span>
                   </CardDescription>
                 </CardContent>

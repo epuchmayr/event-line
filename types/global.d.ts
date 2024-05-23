@@ -1,7 +1,7 @@
 // types/global.d.ts
 
 export type SubObject = {
-  [key: string]: string
+  [key: string]: any
 }
 
 export interface EventType extends SubObject {
@@ -19,6 +19,9 @@ export interface EventType extends SubObject {
   event_privacy: string;
   user_id: string | null;
   user_full_name: string;
+};
+export interface FilteredEventType extends EventType {
+  isFiltered: string | boolean;
 };
 
 export type MarkerType = { name: string; position: number };

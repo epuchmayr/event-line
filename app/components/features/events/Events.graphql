@@ -1,0 +1,18 @@
+query Events {
+  events(order_by: { event_start_date: asc }) {
+    id
+    event_name
+    event_content
+    event_description
+    event_image
+    event_start_date
+    event_end_date
+    event_range_date
+    event_start_time
+    event_end_time
+    event_tags
+    event_privacy
+    user_id
+    user_full_name
+  }
+}

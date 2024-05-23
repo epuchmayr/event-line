@@ -1,0 +1,157 @@
+.calendar-root {
+  --primary-color: #4461c2;
+  --primary-color-50: rgb(131, 145, 192);
+  --primary-color-500: #0a1949;
+
+  --grid-gap: 1px;
+  --grid-height: 650px;
+  --text-color-light: rgba(0, 0, 0, 0.4);
+  --text-color-primary: rgba(0, 0, 0, 0.7);
+  --text-color-reverse: rgb(206, 217, 223);
+  --grid-other-bg-color: rgb(233, 229, 224);
+  --header-cell-color: var(--primary-color);
+  --grid-background-color: rgb(211, 205, 198);
+  --grid-foreground-color: white;
+  --space-xs: 2px;
+  --space-sm: 4px;
+  --space-md: 8px;
+  --space-lg: 16px;
+  width: 100%;
+}
+
+.calendar-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding-block: var(--space-md);
+}
+
+/* | Sun | Mon | Tue | Wed | Thu | Fri | Sat  */
+.day-of-week-header-cell {
+  color: var(--text-color-reverse);
+  background-color: var(--header-cell-color);
+  padding: var(--space-md);
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  text-align: center;
+  font-weight: 500;
+}
+
+.days-of-week,
+.days-grid {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(10px, 250px));
+  grid-auto-rows: 1fr;
+  grid-column-gap: var(--grid-gap);
+  grid-row-gap: var(--grid-gap);
+}
+/* .days-of-week {
+  background-color: var(--text-color-reverse);
+} */
+
+.days-grid {
+  background-color: var(--grid-background-color);
+  /* height: var(--grid-height); */
+  height: 100%;
+  position: relative;
+  border-top: var(--grid-gap) solid var(--grid-background-color);
+}
+
+.day-grid-item-container {
+  position: relative;
+  background-color: var(--grid-foreground-color);
+  display: flex;
+  flex-direction: column;
+  min-height: 100px;
+  overflow: hidden;
+}
+
+.day-grid-item-container:not(.current-month) {
+  background-color: var(--grid-other-bg-color);
+}
+
+.day-grid-item-container:not(.current-month) .day-grid-item-header {
+  color: var(--text-color-light);
+}
+
+/* Position the day label within the day cell */
+.day-grid-item-container .day-grid-item-header {
+  color: var(--text-color-primary);
+  padding: var(--space-sm) var(--space-md) 0;
+  flex-shrink: 0;
+  font-weight: bold;
+}
+
+.day-grid-item-container > .day-content-wrapper {
+  flex: 1;
+  min-height: 0;
+  position: relative;
+}
+
+.navigation-header {
+  display: flex;
+}
+
+.navigation-header > * {
+  margin-right: var(--space-md);
+}
+
+.selected-content-wrapper {
+  background-color: rgb(248, 237, 236);
+}
+.today-content-wrapper {
+  background-color: rgb(234, 242, 255);
+}
+.today-content-wrapper .day-grid-item-header span {
+  /* background-color: var(--primary-color-50); */
+  box-shadow: 0 0 0 3px var(--primary-color-50);
+  border-radius: 50%;
+  padding: 2px 3px;
+}
+
+.day-content-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+.event-item-wrapper {
+  flex: 1 1 auto;
+  height: 1px;
+  overflow: hidden;
+}
+
+.day-grid-item-container.current-month .event-item-wrapper:hover {
+  overflow-y: auto;
+}
+@media (max-width: 640px) {
+  .day-grid-item-container.current-month .event-item-wrapper {
+    overflow-y: auto;
+  }
+}
+
+.event-item {
+  background-color: rgb(68, 97, 194);
+  color: white;
+  padding: var(--space-xs) var(--space-sm);
+  border-radius: 4px;
+  margin-bottom: var(--space-sm);
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.day-content-wrapper .previous .event-item,
+.day-content-wrapper .next .event-item {
+  background-color: var(--primary-color-50);
+}
+
+.event-item:not(.filtered) {
+  opacity: 0.25;
+}
+
+.active-event {
+  background-color: var(--primary-color-500);
+}

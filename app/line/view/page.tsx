@@ -21,28 +21,25 @@ import { Button } from '@/app/components/ui/button';
 import { TypographyP } from '@/app/components/ui/typography';
 import { Input } from '@/app/components/ui/input';
 
-// DATE / FORM FUNCTIONS
-import {
-  addDays,
-  format,
-  addHours,
-  differenceInCalendarDays,
-  getDaysInMonth,
-} from 'date-fns';
-import { date } from 'zod';
-
 // APP COMPONENTS
 import EventLine from '@/app/components/features/events/EventLine';
 import EventList from '@/app/components/features/events/EventList';
 import { EventContext } from '@/app/line/view/eventContext';
 import EventGroup from '@/app/components/features/events/EventGroup';
 
+
+// import { Events as query } from '@/app/components/features/events/Events.graphql';
+
+// import { getClient } from '@/lib/ApolloClient';
+
+// const { data } = await getClient().query({ query: query });
+
+
 export const dynamic = 'force-dynamic';
 
 function SuspenseFallback() {
   return <div>Loading events...</div>;
 }
-
 
 
 export default function Page() {

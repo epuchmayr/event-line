@@ -4,4 +4,4 @@ import {
 
 import { EventType } from '@/types/global';
 
-export const EventContext = createContext({activeEvent: {id: '', event_start_date: ''}, setActiveEvent: (event: EventType) => {}});
+export const EventContext = createContext({activeEvent: {id: '', event_start_date: ''} as EventType, setActiveEvent: (event: EventType) => {}});
