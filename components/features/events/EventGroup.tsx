@@ -9,11 +9,6 @@ import React, {
 
 // REDUX
 import { useSelector, useDispatch } from 'react-redux';
-import {
-  selectEvents,
-  initializeEvents,
-  loadEvents,
-} from '@/lib/features/events/eventsSlice';
 
 // SHADCN COMPONENTS
 import { Button } from '@/components/ui/button';
@@ -108,9 +103,8 @@ export default function EventGroup({ filterString }: { filterString: string }) {
     newDate.getDate(),
   ]);
 
-  // use redux provider
+  // use provider
   const { activeEvent, setActiveEvent } = useContext(EventContext);
-  const events = useSelector(selectEvents);
 
   // console.log('filteredData ', { events: filteredData }, events);
   const memoisedEventLine = useMemo(
