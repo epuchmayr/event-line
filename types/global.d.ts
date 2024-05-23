@@ -1,10 +1,6 @@
 // types/global.d.ts
 
-export type SubObject = {
-  [key: string]: any
-}
-
-export interface EventType extends SubObject {
+export type EventType = {
   id: string;
   event_name: string;
   event_content?: string | null;
@@ -20,9 +16,9 @@ export interface EventType extends SubObject {
   user_id: string | null;
   user_full_name: string;
 };
-export interface FilteredEventType extends EventType {
+
+export type FilteredEventType = EventType & {
   isFiltered: string | boolean;
 };
 
-export type MarkerType = { name: string; position: number };
-
+export type MarkerType = { name: string; position: number };

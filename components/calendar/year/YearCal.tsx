@@ -30,7 +30,7 @@ import {
   SelectGroup,
   SelectItem,
 } from '../../ui/select';
-import { EventType } from '@/types/global';
+import { EventType, FilteredEventType } from '@/types/global';
 
 // Calendar.propTypes = {
 //   className: PropTypes.string,
@@ -270,8 +270,8 @@ const CalendarMonthContent = ({
   return (
     <div className={clsx(styles[relativeMonth], styles['event-item-wrapper'])}>
       <div className={styles['month-grid-item-header']}>{eventCount}</div>
-      {singleList.map((event: EventType) => {
-  console.log(event.id === activeId)
+      {singleList.map((event: FilteredEventType) => {
+      // console.log(event.id === activeId)
         return (
         <div
           onClick={() => handleEventClick(event)}

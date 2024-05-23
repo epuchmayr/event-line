@@ -21,7 +21,7 @@ import { EventContext } from '@/app/line/view/eventContext';
 import Calendar, { CalendarDayHeader } from '../../calendar/month/Calendar';
 import YearCal, { CalendarMonthHeader } from '../../calendar/year/YearCal';
 
-import { EventType, FilteredEventType, SubObject } from '@/types/global';
+import { EventType, FilteredEventType } from '@/types/global';
 
 // GQL
 import { useSuspenseQuery } from '@apollo/experimental-nextjs-app-support/ssr';
@@ -73,28 +73,34 @@ export default function EventGroup({ filterString }: { filterString: string }) {
       errorPolicy: 'all',
     });
 
-  const filteredData: FilteredEventType[] = useMemo(() =>
-    (data &&
-      data.events?.map((event) => {
-        // create a subset user data
-        var subset = [
-          'event_name',
-          'event_content',
-          'event_description',
-          'user_full_name',
-        ].reduce(function (subObj: SubObject, key: string) {
-          if (key in event) subObj[key] = event[key];
-          return subObj;
-        }, {});
+  const filteredData: FilteredEventType[] = useMemo(
+    () =>
+      (data &&
+        data.events?.map((event) => {
+          const {
+            event_name,
+            event_content,
+            event_description,
+            user_full_name,
+          } = event;
 
-        // filter the subset object
-        const isFiltered = JSON.stringify(Object.values(subset))
-          .toLowerCase()
-          .includes(filterString.toLowerCase());
+          const subset = [
+            event_name,
+            event_content,
+            event_description,
+            user_full_name,
+          ]
+            .join(' ')
+            .toLowerCase();
 
-        return { ...event, isFiltered: isFiltered };
-      })) ||
-    [], [data, filterString] )
+          // filter the subset object
+          const isFiltered = subset.includes(filterString.toLowerCase());
+
+          return { ...event, isFiltered: isFiltered };
+        })) ||
+      [],
+    [data, filterString]
+  );
 
   // Calendar current view
   const [yearMonthDay, setYearMonthDay] = useState<number[]>([
