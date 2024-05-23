@@ -1,11 +1,12 @@
-import Link from 'next/link';
+import Link from "next/link";
 
-import { auth, currentUser } from '@clerk/nextjs';
-import { BackgroundBeams } from '@/app/components/ui/background-beams';
+import { auth, currentUser } from "@clerk/nextjs";
+import { BackgroundBeams } from "@/app/components/ui/background-beams";
+import { getUserEvents } from "@/lib/data";
 
-import styles from './page.module.css';
+import styles from "./page.module.css";
 
-import Auth from '@/app/components/HeaderAuth';
+import Auth from "@/app/components/HeaderAuth";
 
 export default async function Home() {
   // Get the userId from auth() -- if null, the user is not signed in
@@ -18,6 +19,10 @@ export default async function Home() {
   // Get the Backend API User object when you need access to the user's information
   const user = await currentUser();
   // Use `user` to render user details or create UI elements
+
+  console.log("jason test: fetching events...");
+  const events = await getUserEvents("410544b2-4001-4271-9855-fec4b6a6442a");
+  console.log("jason test: events", events);
 
   return (
     <main className={styles.main}>
@@ -35,13 +40,13 @@ export default async function Home() {
       </div>
 
       <div className={styles.grid}>
-        <Link href='/' className={styles.card}>
+        <Link href="/" className={styles.card}>
           <h2>
             Connected <span>-&gt;</span>
           </h2>
           <p>See how your experiences connect to others.</p>
         </Link>
-        <Link href='/' className={styles.card}>
+        <Link href="/" className={styles.card}>
           <h2>
             Personal <span>-&gt;</span>
           </h2>
@@ -49,7 +54,7 @@ export default async function Home() {
             A line taylored to your family interactions and shared memories.
           </p>
         </Link>
-        <Link href='/' className={styles.card}>
+        <Link href="/" className={styles.card}>
           <h2>
             Recurring <span>-&gt;</span>
           </h2>

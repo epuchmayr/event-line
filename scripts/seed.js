@@ -52,7 +52,7 @@ async function seedEvents(client) {
     content TEXT,
     start_date TIMESTAMP NOT NULL,
     end_date TIMESTAMP,
-    tags UUID ARRAY,
+    tags VARCHAR(255) ARRAY,
     privacy TEXT NOT NULL,
     created_at TIMESTAMP DEFAULT now(),
     updated_at TIMESTAMP DEFAULT now()
