@@ -27,6 +27,7 @@ import EventList from '@/app/components/features/events/EventList';
 import { EventContext } from '@/app/line/view/eventContext';
 import EventGroup from '@/app/components/features/events/EventGroup';
 
+import { EventType } from '@/types/global';
 
 // import { Events as query } from '@/app/components/features/events/Events.graphql';
 
@@ -56,7 +57,7 @@ export default function Page() {
   // const pathLengthFifth = useTransform(scrollYProgress, [0, 0.8], [0, 1.2]);
 
   const [form, setForm] = useState({ filter: '' });
-  const [activeEvent, setActiveEvent] = useState({id: '', event_start_date: ''});
+  const [activeEvent, setActiveEvent] = useState({id: '', event_start_date: ''} as EventType);
 
   // const memoisedEventLine = useCallback(
   //   () => <EventLine filterString={form.filter} />,
