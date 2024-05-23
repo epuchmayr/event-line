@@ -29,7 +29,7 @@ import {
   SelectGroup,
   SelectItem,
 } from '../../ui/select';
-import { EventType } from '@/types/global';
+import { EventType, FilteredEventType } from '@/types/global';
 
 export default function Calendar({
   className = '',
@@ -289,7 +289,7 @@ const CalendarDayContent = ({
 }) => {
   return (
     <div className={clsx(styles[relativeMonth], styles['event-item-wrapper'])}>
-      {events.map((event: EventType) => (
+      {events.map((event: FilteredEventType) => (
         <div
           onClick={() => handleEventClick(event)}
           key={event.id}

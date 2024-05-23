@@ -25,7 +25,7 @@ import {
 } from '@/components/ui/card';
 import { TypographyP } from '@/components/ui/typography';
 
-import { SubObject, EventType } from '@/types/global';
+import { EventType } from '@/types/global';
 
 import Tags from './Tags';
 
@@ -92,24 +92,29 @@ export default function EventList({ filterString }: { filterString: string }) {
         onPointerEnter={() => setHasFocus(true)}
         onPointerLeave={() => setHasFocus(false)}
       >
-        {[...data.events].reverse().map((item: EventType, index) => {
+        {[...data.events].reverse().map((event: EventType, index) => {
           // create a subset user data
-          var subset = [
-            'event_name',
-            'event_content',
-            'event_description',
-            'user_full_name',
-          ].reduce(function (subObj: SubObject, key: string) {
-            if (key in item) subObj[key] = item[key];
-            return subObj;
-          }, {});
+
+          const {
+            event_name,
+            event_content,
+            event_description,
+            user_full_name,
+          } = event;
+
+          const subset = [
+            event_name,
+            event_content,
+            event_description,
+            user_full_name,
+          ]
+            .join(' ')
+            .toLowerCase();
 
           // filter the subset object
-          const isFiltered = JSON.stringify(Object.values(subset))
-            .toLowerCase()
-            .includes(filterString.toLowerCase());
+          const isFiltered = subset.includes(filterString.toLowerCase());
 
-          const currentEvent = activeEvent.id === item.id;
+          const currentEvent = activeEvent.id === event.id;
 
           if (eventRefs.current && currentEvent) {
             // console.log('scrolling into view', eventRefs.current, index, eventRefs.current[index])
@@ -117,10 +122,10 @@ export default function EventList({ filterString }: { filterString: string }) {
           }
 
           return (
-            <div key={'List_' + item.id}>
+            <div key={'List_' + event.id}>
               <Card
                 className={`rounded-none border-t-0 ${
-                  activeEvent.id === item.id ? 'bg-slate-800' : ''
+                  activeEvent.id === event.id ? 'bg-slate-800' : ''
                 }`}
                 style={{
                   opacity: isFiltered ? 1 : 0.75,
@@ -129,17 +134,17 @@ export default function EventList({ filterString }: { filterString: string }) {
                   pointerEvents: isFiltered ? 'auto' : 'none',
                 }}
                 tabIndex={isFiltered ? 0 : -1}
-                onPointerEnter={() => setActiveEvent(item)}
+                onPointerEnter={() => setActiveEvent(event)}
                 onFocus={() => {
                   setHasFocus(true);
-                  setActiveEvent(item);
+                  setActiveEvent(event);
                 }}
                 onBlur={() => setHasFocus(false)}
                 ref={eventRefs.current[index]}
               >
                 <CardHeader>
                   <CardTitle className='truncate text-base'>
-                    {item.event_name}
+                    {event.event_name}
                   </CardTitle>
                   {/* <CardDescription>
                     <span>{item.event_description}</span>
@@ -149,28 +154,28 @@ export default function EventList({ filterString }: { filterString: string }) {
                 )} */}
                 </CardHeader>
                 <CardContent>
-                  <TypographyP>{item.event_content}</TypographyP>
+                  <TypographyP>{event.event_content}</TypographyP>
                   <CardDescription className='mt-5'>
                     <span>
-                      {new Date(item.event_start_date).toDateString()}
+                      {new Date(event.event_start_date).toDateString()}
                       <br />
-                      {item.event_start_time &&
+                      {event.event_start_time &&
                         `${String(
-                          JSON.parse(item.event_start_time).hour % 12
+                          JSON.parse(event.event_start_time).hour % 12
                         ).padStart(2, '0')}:${String(
-                          JSON.parse(item.event_start_time).minute
+                          JSON.parse(event.event_start_time).minute
                         ).padStart(2, '0')} ${
-                          JSON.parse(item.event_start_time).hour >= 12
+                          JSON.parse(event.event_start_time).hour >= 12
                             ? 'PM'
                             : 'AM'
                         }`}
-                      {item.event_end_time &&
+                      {event.event_end_time &&
                         ` - ${String(
-                          JSON.parse(item.event_end_time).hour % 12
+                          JSON.parse(event.event_end_time).hour % 12
                         ).padStart(2, '0')}:${String(
-                          JSON.parse(item.event_end_time).minute
+                          JSON.parse(event.event_end_time).minute
                         ).padStart(2, '0')} ${
-                          JSON.parse(item.event_end_time).hour >= 12
+                          JSON.parse(event.event_end_time).hour >= 12
                             ? 'PM'
                             : 'AM'
                         }`}
@@ -179,7 +184,7 @@ export default function EventList({ filterString }: { filterString: string }) {
                 </CardContent>
                 <CardFooter>
                   {/* <p>{item.user_full_name}</p> */}
-                  <Tags tags={item.event_tags} />
+                  <Tags tags={event.event_tags} />
                 </CardFooter>
               </Card>
             </div>

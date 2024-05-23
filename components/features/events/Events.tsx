@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { TypographyP } from '@/components/ui/typography';
 
-import { SubObject, EventType } from '@/types/global';
+import { EventType } from '@/types/global';
 
 import Tags from './Tags';
 
@@ -30,29 +30,33 @@ export default function Events({
 
   return (
     <>
-      {data.map((item: EventType, index: number) => {
+      {data.map((event: EventType, index: number) => {
         // create a subset user data
-        var subset = [
-          'event_name',
-          'event_content',
-          'event_description',
-          'user_full_name',
-        ].reduce(function (subObj: SubObject, key: string) {
-          if (key in item) subObj[key] = item[key];
-          return subObj;
-        }, {});
+        const {
+          event_name,
+          event_content,
+          event_description,
+          user_full_name,
+        } = event;
+
+        const subset = [
+          event_name,
+          event_content,
+          event_description,
+          user_full_name,
+        ]
+          .join(' ')
+          .toLowerCase();
 
         // filter the subset object
-        const isFiltered = JSON.stringify(Object.values(subset))
-          .toLowerCase()
-          .includes(filterString.toLowerCase());
+        const isFiltered = subset.includes(filterString.toLowerCase());
 
         // check if the current event is active
-        const currentEvent = activeEvent.id === item.id;
+        const currentEvent = activeEvent.id === event.id;
 
         return (
           <div
-            key={item.id}
+            key={event.id}
             className={`group absolute hover:z-10 focus-within:z-10 odd:top-8 even:bottom-8 translate-x-[-50%] transition-all duration-300 ease-in-out ${
               isFiltered ? 'z-[1]' : 'z-0'
             }`}
@@ -62,7 +66,7 @@ export default function Events({
               zIndex: currentEvent ? 10 : undefined,
               pointerEvents: isFiltered ? 'auto' : 'none',
             }}
-            onPointerEnter={() => setActiveEvent(item)}
+            onPointerEnter={() => setActiveEvent(event)}
           >
             <div
               className={`absolute ${
@@ -83,12 +87,12 @@ export default function Events({
                 isFiltered ? '' : 'scale-50'
               } ${currentEvent ? 'bg-slate-800' : ''}`}
               tabIndex={isFiltered ? 0 : -1}
-              onFocus={() => setActiveEvent(item)}
+              onFocus={() => setActiveEvent(event)}
             >
               <CardHeader>
-                <CardTitle className='truncate'>{item.event_name}</CardTitle>
+                <CardTitle className='truncate'>{event.event_name}</CardTitle>
                 <CardDescription className='truncate flex flex-row justify-between'>
-                  <span>{item.event_description}</span>
+                  <span>{event.event_description}</span>
                 </CardDescription>
                 {/* {item.event_image && (
                   <img src={item.event_image} alt={item.event_name} />
@@ -97,7 +101,7 @@ export default function Events({
               <CardContent className='truncate hidden group-hover:block group-focus/card:block'>
                 {/* <TypographyP>{item.event_content}</TypographyP> */}
                 <CardDescription className='mt-5'>
-                  <span>{new Date(item.event_start_date).toDateString()}</span>
+                  <span>{new Date(event.event_start_date).toDateString()}</span>
                 </CardDescription>
               </CardContent>
               {/* <CardFooter className='flex justify-between truncate'>
