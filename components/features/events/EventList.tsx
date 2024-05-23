@@ -22,8 +22,8 @@ import {
   CardTitle,
   CardContent,
   CardDescription,
-} from '@/app/components/ui/card';
-import { TypographyP } from '@/app/components/ui/typography';
+} from '@/components/ui/card';
+import { TypographyP } from '@/components/ui/typography';
 
 import { SubObject, EventType } from '@/types/global';
 

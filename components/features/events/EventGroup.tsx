@@ -16,7 +16,7 @@ import {
 } from '@/lib/features/events/eventsSlice';
 
 // SHADCN COMPONENTS
-import { Button } from '@/app/components/ui/button';
+import { Button } from '@/components/ui/button';
 
 // APP COMPONENTS
 import EventLine from './EventLine';

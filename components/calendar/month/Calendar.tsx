@@ -31,14 +31,6 @@ import {
 } from '../../ui/select';
 import { EventType } from '@/types/global';
 
-// Calendar.propTypes = {
-//   className: PropTypes.string,
-//   yearMonthDay: PropTypes.arrayOf(PropTypes.number).isRequired, // e.g. [2021, 6] for June 2021
-//   onYearMonthDayChange: PropTypes.func.isRequired,
-//   renderDay: PropTypes.func,
-//   data: PropTypes.array,
-// };
-
 export default function Calendar({
   className = '',
   yearMonthDay = [2021, 6, 1],

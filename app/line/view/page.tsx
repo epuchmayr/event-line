@@ -11,25 +11,25 @@ import React, {
 
 // 3D EFFECTS
 import { useScroll, useTransform } from 'framer-motion';
-import { GeminiEffect } from '@/app/components/motion/GeminiEffect';
+import { GeminiEffect } from '@/components/motion/GeminiEffect';
 import { positionView } from 'three/examples/jsm/nodes/Nodes.js';
 
 // SHADCN COMPONENTS
-import { Badge } from '@/app/components/ui/badge';
+import { Badge } from '@/components/ui/badge';
 import Link from 'next/link';
-import { Button } from '@/app/components/ui/button';
-import { TypographyP } from '@/app/components/ui/typography';
-import { Input } from '@/app/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { TypographyP } from '@/components/ui/typography';
+import { Input } from '@/components/ui/input';
 
 // APP COMPONENTS
-import EventLine from '@/app/components/features/events/EventLine';
-import EventList from '@/app/components/features/events/EventList';
+import EventLine from '@/components/features/events/EventLine';
+import EventList from '@/components/features/events/EventList';
 import { EventContext } from '@/app/line/view/eventContext';
-import EventGroup from '@/app/components/features/events/EventGroup';
+import EventGroup from '@/components/features/events/EventGroup';
 
 import { EventType } from '@/types/global';
 
-// import { Events as query } from '@/app/components/features/events/Events.graphql';
+// import { Events as query } from '@/components/features/events/Events.graphql';
 
 // import { getClient } from '@/lib/ApolloClient';
 
