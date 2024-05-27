@@ -1,47 +1,26 @@
 'use client';
 import React, {
-  useEffect,
-  useRef,
   useState,
-  Suspense,
-  useCallback,
-  ReactNode,
-  createContext,
 } from 'react';
 
 // 3D EFFECTS
-import { useScroll, useTransform } from 'framer-motion';
-import { GeminiEffect } from '@/components/motion/GeminiEffect';
-import { positionView } from 'three/examples/jsm/nodes/Nodes.js';
+// import { useScroll, useTransform } from 'framer-motion';
+// import { GeminiEffect } from '@/components/motion/GeminiEffect';
+// import { positionView } from 'three/examples/jsm/nodes/Nodes.js';
 
 // SHADCN COMPONENTS
-import { Badge } from '@/components/ui/badge';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { TypographyP } from '@/components/ui/typography';
 import { Input } from '@/components/ui/input';
 
 // APP COMPONENTS
-import EventLine from '@/components/features/events/EventLine';
-import EventList from '@/components/features/events/EventList';
 import { EventContext } from '@/app/line/view/eventContext';
 import EventGroup from '@/components/features/events/EventGroup';
+import {CreateEventDialog} from '@/components/dialog/CreateEventDialog';
 
+// TYPES
 import { EventType } from '@/types/global';
 
-// import { Events as query } from '@/components/features/events/Events.graphql';
-
-// import { getClient } from '@/lib/ApolloClient';
-
-// const { data } = await getClient().query({ query: query });
-
-
 export const dynamic = 'force-dynamic';
-
-function SuspenseFallback() {
-  return <div>Loading events...</div>;
-}
-
 
 export default function Page() {
   // const ref = useRef(null);
@@ -58,16 +37,6 @@ export default function Page() {
 
   const [form, setForm] = useState({ filter: '' });
   const [activeEvent, setActiveEvent] = useState({id: '', event_start_date: ''} as EventType);
-
-  // const memoisedEventLine = useCallback(
-  //   () => <EventLine filterString={form.filter} />,
-  //   [form.filter]
-  // );
-
-  const memoisedEventList = useCallback(
-    () => <EventList filterString={form.filter} />,
-    [form.filter]
-  );
 
   return (
     <div className='bg-black h-lvh flex flex-col'>
@@ -87,9 +56,7 @@ export default function Page() {
 
       {/* <div className='sticky top-5'> */}
       <div className='flex gap-2 justify-between p-4'>
-        <Link href={'/line/create'}>
-          <Button>Create event</Button>
-        </Link>
+        <CreateEventDialog />
         <Input
           type='text'
           onChange={(e) => {

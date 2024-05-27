@@ -49,6 +49,7 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 
 import dynamic from 'next/dynamic';
+import { DialogClose } from '@/components/ui/dialog';
 
 // dayjs datePicker and timePicker setup
 const currentDate = new Date();
@@ -190,22 +191,6 @@ export default function CreateForm({
   }
 
   return (
-    <Card className='w-[600px]'>
-      <Image
-        className='h-20 w-full object-cover rounded-t-lg'
-        src={'/images/intergalactic_loom.png'}
-        alt='intergalactic loom'
-        width={640}
-        height={640}
-        priority
-      />
-      <CardHeader>
-        <CardTitle>Create a moment</CardTitle>
-        <CardDescription>
-          {/* {selectedDate.format('YYYY-MM-DD').toString()} */}
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-4'>
             <FormField
@@ -220,7 +205,7 @@ export default function CreateForm({
                 </FormItem>
               )}
             />
-            <FormField
+            {/* <FormField
               control={form.control}
               name='event_description'
               render={({ field }) => (
@@ -231,7 +216,7 @@ export default function CreateForm({
                   <FormMessage />
                 </FormItem>
               )}
-            />
+            /> */}
             <FormField
               control={form.control}
               name='event_content'
@@ -240,7 +225,7 @@ export default function CreateForm({
                   <FormLabel>Event content</FormLabel>
                   <FormControl>
                     <Textarea
-                      placeholder='for a more detailed explanation'
+                      placeholder='a quick explanation'
                       {...field}
                     />
                   </FormControl>
@@ -439,7 +424,5 @@ export default function CreateForm({
             </FormItem>
           </form>
         </Form>
-      </CardContent>
-    </Card>
   );
 }

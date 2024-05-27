@@ -54,7 +54,7 @@ export default function Auth({
   if (userId) {
     return (
       <div className={styles.actions}>
-        <Link href='/line'>
+        <Link href='/line/view'>
           <Button variant='secondary'>line-view</Button>
         </Link>
 

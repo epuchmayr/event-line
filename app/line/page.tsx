@@ -37,9 +37,6 @@ export default function Page() {
   
   return (
     <div className='h-screen'>
-      <Link href={'/line/create'}>
-        <Button>Create</Button>
-      </Link>
       <Link href={'/line/view'}>
         <Button variant='secondary'>View</Button>
       </Link>
