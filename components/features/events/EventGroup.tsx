@@ -124,8 +124,9 @@ export default function EventGroup({ filterString }: { filterString: string }) {
   );
 
   const memoisedEventList = useMemo(
-    () => <EventList filterString={filterString} />,
-    [filterString]
+    () => <EventList eventData={{ events: filteredData }}
+    filterString={filterString} />,
+    [filterString, filteredData]
   );
 
   useEffect(() => {

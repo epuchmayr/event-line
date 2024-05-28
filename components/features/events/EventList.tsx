@@ -25,11 +25,13 @@ import {
 } from '@/components/ui/card';
 import { TypographyP } from '@/components/ui/typography';
 
-import { EventType } from '@/types/global';
+import { EventType, FilteredEventType } from '@/types/global';
 
 import Tags from './Tags';
 
 import { EventContext } from '@/app/line/view/eventContext';
+
+import { userFriendlyTime } from './helpers';
 
 // APP COMPONENTS
 import Events from './Events';
@@ -56,23 +58,20 @@ const query = gql`
   }
 `;
 
-export default function EventList({ filterString }: { filterString: string }) {
-  const {
-    error,
-    data,
-  }: { error?: any; data: { events: [EventType] } | undefined } =
-    useSuspenseQuery(query, {
-      errorPolicy: 'all',
-    });
+export default function EventList({
+  eventData,
+  filterString,
+}: {
+  eventData: { events: FilteredEventType[] };
+  filterString: string;
+}) {
   const { activeEvent, setActiveEvent } = useContext(EventContext);
   const [hasFocus, setHasFocus] = useState(false);
 
   // React ref to store array of refs
   const eventRefs = useRef<React.MutableRefObject<HTMLDivElement>[]>([]);
 
-  if (error || !data) return <p>Error :(</p>;
-
-  eventRefs.current = [...Array(data.events.length).keys()].map(
+  eventRefs.current = [...Array(eventData.events.length).keys()].map(
     (_, i) => eventRefs.current[i] ?? createRef()
   );
 
@@ -92,27 +91,7 @@ export default function EventList({ filterString }: { filterString: string }) {
         onPointerEnter={() => setHasFocus(true)}
         onPointerLeave={() => setHasFocus(false)}
       >
-        {[...data.events].reverse().map((event: EventType, index) => {
-          // create a subset user data
-
-          const {
-            event_name,
-            event_content,
-            event_description,
-            user_full_name,
-          } = event;
-
-          const subset = [
-            event_name,
-            event_content,
-            event_description,
-            user_full_name,
-          ]
-            .join(' ')
-            .toLowerCase();
-
-          // filter the subset object
-          const isFiltered = subset.includes(filterString.toLowerCase());
+        {[...eventData.events].reverse().map((event: FilteredEventType, index) => {
 
           const currentEvent = activeEvent.id === event.id;
 
@@ -128,12 +107,12 @@ export default function EventList({ filterString }: { filterString: string }) {
                   activeEvent.id === event.id ? 'bg-slate-800' : ''
                 }`}
                 style={{
-                  opacity: isFiltered ? 1 : 0.75,
-                  height: isFiltered ? undefined : '22px',
-                  overflow: isFiltered ? undefined : 'hidden',
-                  pointerEvents: isFiltered ? 'auto' : 'none',
+                  opacity: event.isFiltered ? 1 : 0.75,
+                  height: event.isFiltered ? undefined : '22px',
+                  overflow: event.isFiltered ? undefined : 'hidden',
+                  pointerEvents: event.isFiltered ? 'auto' : 'none',
                 }}
-                tabIndex={isFiltered ? 0 : -1}
+                tabIndex={event.isFiltered ? 0 : -1}
                 onPointerEnter={() => setActiveEvent(event)}
                 onFocus={() => {
                   setHasFocus(true);
@@ -160,25 +139,9 @@ export default function EventList({ filterString }: { filterString: string }) {
                       {new Date(event.event_start_date).toDateString()}
                       <br />
                       {event.event_start_time &&
-                        `${String(
-                          JSON.parse(event.event_start_time).hour % 12
-                        ).padStart(2, '0')}:${String(
-                          JSON.parse(event.event_start_time).minute
-                        ).padStart(2, '0')} ${
-                          JSON.parse(event.event_start_time).hour >= 12
-                            ? 'PM'
-                            : 'AM'
-                        }`}
+                        `${userFriendlyTime(event.event_start_time)}`}
                       {event.event_end_time &&
-                        ` - ${String(
-                          JSON.parse(event.event_end_time).hour % 12
-                        ).padStart(2, '0')}:${String(
-                          JSON.parse(event.event_end_time).minute
-                        ).padStart(2, '0')} ${
-                          JSON.parse(event.event_end_time).hour >= 12
-                            ? 'PM'
-                            : 'AM'
-                        }`}
+                        ` - ${userFriendlyTime(event.event_end_time)}`}
                     </span>
                   </CardDescription>
                 </CardContent>
