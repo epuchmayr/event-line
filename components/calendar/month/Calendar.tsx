@@ -58,7 +58,7 @@ export default function Calendar({
     const itemYear = itemDateString.year().toString();
     const itemMonth = itemDateString.month().toString();
     const itemDate = itemDateString.date().toString();
-    // console.log('itemDateString', acc, itemYear, itemMonth);
+    
     if (!acc[itemYear]) {
       acc[itemYear] = [];
     }
@@ -71,14 +71,6 @@ export default function Calendar({
     acc[itemYear][itemMonth][itemDate].push(curr);
     return acc;
   }, {});
-
-  const currentMonthEvents = sortedEventData[year]?.[month - 1] || [];
-  // console.log('data', year, month, currentMonthEvents);
-  console.log([
-    sortedEventData[year]?.[month - 2],
-    sortedEventData[year]?.[month - 1],
-    sortedEventData[year]?.[month],
-  ]);
 
   const currentMonthViewEvents = [
     sortedEventData[year]?.[month - 2],
@@ -139,8 +131,6 @@ export default function Calendar({
     onYearMonthDayChange([nextYear, nextMonth]);
   };
 
-  // console.log(today, getDate(today), getMonth(today))
-
   return (
     <div className={clsx(styles['calendar-root'], className)}>
       <div className='navigation-header'>
@@ -194,9 +184,6 @@ export default function Calendar({
       </div>
       <div className={styles['days-grid']}>
         {calendarGridDayObjects.map((day: DayObjectType) => {
-          // console.log('day', currentDate === day.dayOfMonth && currentMonth === dayjs(day.dateString).month())
-
-          // console.log('day', day, currentMonthEvents[day.dayOfMonth] ?? null);
 
           return (
             <div
@@ -206,7 +193,6 @@ export default function Calendar({
                 isWeekendDay(day.dateString) && styles['weekend-day'],
                 day.isCurrentMonth && styles['current-month']
               )}
-              // onClick={() => console.log('day clicked', day)}
             >
               <div
                 className={clsx(

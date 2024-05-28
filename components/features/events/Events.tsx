@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-// SHADCN COMPONENTS
+// UI COMPONENTS
 import {
   Card,
   CardHeader,
@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/card';
 import { TypographyP } from '@/components/ui/typography';
 
-import { EventType } from '@/types/global';
+import { FilteredEventType } from '@/types/global';
 
 import Tags from './Tags';
 
@@ -22,7 +22,7 @@ export default function Events({
   position,
   filterString,
 }: {
-  data: EventType[];
+  data: FilteredEventType[];
   position: string[];
   filterString: string;
 }) {
@@ -30,26 +30,7 @@ export default function Events({
 
   return (
     <>
-      {data.map((event: EventType, index: number) => {
-        // create a subset user data
-        const {
-          event_name,
-          event_content,
-          event_description,
-          user_full_name,
-        } = event;
-
-        const subset = [
-          event_name,
-          event_content,
-          event_description,
-          user_full_name,
-        ]
-          .join(' ')
-          .toLowerCase();
-
-        // filter the subset object
-        const isFiltered = subset.includes(filterString.toLowerCase());
+      {data.map((event: FilteredEventType, index: number) => {
 
         // check if the current event is active
         const currentEvent = activeEvent.id === event.id;
@@ -58,13 +39,13 @@ export default function Events({
           <div
             key={event.id}
             className={`group absolute hover:z-10 focus-within:z-10 odd:top-8 even:bottom-8 translate-x-[-50%] transition-all duration-300 ease-in-out ${
-              isFiltered ? 'z-[1]' : 'z-0'
+              event.isFiltered ? 'z-[1]' : 'z-0'
             }`}
             style={{
               left: `${position[index]}%`,
-              opacity: isFiltered ? 1 : 0.1,
+              opacity: event.isFiltered ? 1 : 0.1,
               zIndex: currentEvent ? 10 : undefined,
-              pointerEvents: isFiltered ? 'auto' : 'none',
+              pointerEvents: event.isFiltered ? 'auto' : 'none',
             }}
             onPointerEnter={() => setActiveEvent(event)}
           >
@@ -84,9 +65,9 @@ export default function Events({
             </div>
             <Card
               className={`group/card w-[180px] group-hover:w-[350px] focus:w-[350px] transition-all duration-300 ease-in-out scale-75 group-hover:scale-100 focus:scale-100 ${
-                isFiltered ? '' : 'scale-50'
+                event.isFiltered ? '' : 'scale-50'
               } ${currentEvent ? 'bg-slate-800' : ''}`}
-              tabIndex={isFiltered ? 0 : -1}
+              tabIndex={event.isFiltered ? 0 : -1}
               onFocus={() => setActiveEvent(event)}
             >
               <CardHeader>
